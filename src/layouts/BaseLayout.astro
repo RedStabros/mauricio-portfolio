@@ -14,7 +14,7 @@ const {
   description = UI_COPY.es.metaDescription,
 } = Astro.props;
 
-const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mauriciosaldarriaga.dev';
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mauricio-portfolio-z11.pages.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).toString();
 const ogImageUrl = `${siteOrigin}/og-image.png`;
 

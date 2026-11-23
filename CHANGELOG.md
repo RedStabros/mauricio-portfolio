@@ -3,6 +3,14 @@
 All notable changes to this portfolio are documented in this file.
 This project follows Semantic Versioning (`MAJOR.MINOR.PATCH`).
 
+## [1.0.0] - 2026-11-22
+
+### Added
+- Production Cloudflare Pages launch at `https://mauricio-portfolio-z11.pages.dev` with live GitHub GraphQL synchronization (`source: "github"`) and encrypted `GITHUB_TOKEN` secret.
+- Complete technical SEO setup: `public/robots.txt`, `public/sitemap.xml`, `public/site.webmanifest`, `public/og-image.png` (1200x630), canonical tags, Open Graph/Twitter cards, and Schema.org JSON-LD (`Person` + `WebSite`).
+- Single-page ATS-optimized resumes in English (`public/cv-en.pdf`) and Spanish (`public/cv-es.pdf`) with 6 verified clickable links and locale-aware download.
+- Hybrid 80x80 sidebar avatar (real photo + custom pixel-art game-dev avatar on hover/tap), Ciudad Friki live traction metrics (`850+ users`, `500+ downloads`, `5.0 / 5`), global relocation and non-profit collaboration section, theme-aware GitHub Sync scanline skeleton, and non-blocking first-visit entrance scan.
+
 ## [0.5.1] - 2026-11-22
 
 ### Added

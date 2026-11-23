@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://mauriciosaldarriaga.dev/sitemap.xml
+Sitemap: https://mauricio-portfolio-z11.pages.dev/sitemap.xml
