@@ -355,11 +355,11 @@ const themes = [
 
   interface ThemeTransitionSpec {
     patternId: string;
-    rootClip: [string, string];
-    waveClip: [string, string, string];
+    clip: [string, string];
   }
 
-  // Return the clip-path choreography and SVG pattern matched to the incoming theme.
+  // Return the two-keyframe clip-path and SVG pattern matched to the incoming theme.
+  // Using strictly two keyframes avoids easing restarts mid-sweep.
   function getTransitionSpec(
     next: ThemeId,
     originX: number,
@@ -370,35 +370,28 @@ const themes = [
       // Diagonal architectural blueprint sweep from left to right.
       return {
         patternId: 'arch-skin-grid',
-        rootClip: [
+        clip: [
           'polygon(0% 0%, 0% 0%, -25% 100%, 0% 100%)',
-          'polygon(0% 0%, 130% 0%, 100% 100%, 0% 100%)',
-        ],
-        waveClip: [
-          'polygon(0% 0%, 0% 0%, -25% 100%, 0% 100%)',
-          'polygon(0% 0%, 75% 0%, 45% 100%, 0% 100%)',
           'polygon(0% 0%, 130% 0%, 100% 100%, 0% 100%)',
         ],
       };
     }
 
     if (next === 'daylight') {
-      // Top-down shutter reveal with a subtle engineering dot grid.
+      // Top-down shutter reveal with a black-ink drafting grid.
       return {
         patternId: 'paper-dot-grid',
-        rootClip: ['inset(0% 0% 100% 0%)', 'inset(0% 0% 0% 0%)'],
-        waveClip: ['inset(0% 0% 100% 0%)', 'inset(0% 0% 42% 0%)', 'inset(0% 0% 0% 0%)'],
+        clip: ['inset(0% 0% 100% 0%)', 'inset(0% 0% 0% 0%)'],
       };
     }
 
     // Precision: radial cybernetic hexagonal wave expanding from the clicked dot.
-    const startClip = `circle(0px at ${originX}px ${originY}px)`;
-    const midClip = `circle(${Math.round(maxRadius * 0.55)}px at ${originX}px ${originY}px)`;
-    const endClip = `circle(${Math.ceil(maxRadius)}px at ${originX}px ${originY}px)`;
     return {
       patternId: 'hex-skin-grid',
-      rootClip: [startClip, endClip],
-      waveClip: [startClip, midClip, endClip],
+      clip: [
+        `circle(0px at ${originX}px ${originY}px)`,
+        `circle(${Math.ceil(maxRadius)}px at ${originX}px ${originY}px)`,
+      ],
     };
   }
 
@@ -484,35 +477,35 @@ const themes = [
 
     transition.ready
       .then(() => {
+        const sweepTiming: KeyframeAnimationOptions = {
+          duration: 800,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'forwards',
+        };
+
         document.documentElement.animate(
-          {
-            clipPath: spec.rootClip,
-          },
-          {
-            duration: 860,
-            easing: 'cubic-bezier(0.25, 0.9, 0.3, 1)',
-            fill: 'forwards',
-            pseudoElement: '::view-transition-new(root)',
-          }
+          { clipPath: spec.clip },
+          { ...sweepTiming, pseudoElement: '::view-transition-new(root)' }
         );
 
-        // Finish the mesh fade slightly before root ends and zero out the DOM opacity
-        // so teardown never flashes a visible frame.
-        const meshAnim = document.documentElement.animate(
-          [
-            { clipPath: spec.waveClip[0], opacity: 1 },
-            { clipPath: spec.waveClip[1], opacity: 0.85, offset: 0.6 },
-            { clipPath: spec.waveClip[2], opacity: 0 },
-          ],
+        // Animate mesh clip-path on the exact same two-keyframe curve as root (no mid-sweep pause),
+        // and fade opacity on a separate ease-in curve that finishes just before root teardown.
+        document.documentElement.animate(
+          { clipPath: spec.clip },
+          { ...sweepTiming, pseudoElement: '::view-transition-new(skin-wave)' }
+        );
+
+        const fadeAnim = document.documentElement.animate(
+          { opacity: [0.95, 0] },
           {
-            duration: 780,
-            easing: 'cubic-bezier(0.25, 0.9, 0.3, 1)',
+            duration: 760,
+            easing: 'cubic-bezier(0.5, 0, 0.85, 0.4)',
             fill: 'forwards',
             pseudoElement: '::view-transition-new(skin-wave)',
           }
         );
 
-        meshAnim.onfinish = () => {
+        fadeAnim.onfinish = () => {
           if (skinWaveEl) skinWaveEl.style.opacity = '0';
         };
       })
