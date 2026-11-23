@@ -435,11 +435,13 @@ const themes = [
       skinRectEl.setAttribute('fill', `url(#${spec.patternId})`);
     }
     skinWaveEl.style.color = accentColor;
+    skinWaveEl.style.opacity = '1';
     skinWaveEl.classList.remove('hidden');
   }
 
   function hideThemeMesh() {
     if (!skinWaveEl) return;
+    skinWaveEl.style.opacity = '0';
     skinWaveEl.classList.add('hidden');
   }
 
@@ -482,35 +484,37 @@ const themes = [
 
     transition.ready
       .then(() => {
-        // The snapshot is already captured in ::view-transition-new(skin-wave),
-        // so hide the underlying DOM node now to prevent a 1-frame flash when the transition ends.
-        hideThemeMesh();
-
         document.documentElement.animate(
           {
             clipPath: spec.rootClip,
           },
           {
-            duration: 820,
+            duration: 860,
             easing: 'cubic-bezier(0.25, 0.9, 0.3, 1)',
             fill: 'forwards',
             pseudoElement: '::view-transition-new(root)',
           }
         );
 
-        document.documentElement.animate(
+        // Finish the mesh fade slightly before root ends and zero out the DOM opacity
+        // so teardown never flashes a visible frame.
+        const meshAnim = document.documentElement.animate(
           [
             { clipPath: spec.waveClip[0], opacity: 1 },
             { clipPath: spec.waveClip[1], opacity: 0.85, offset: 0.6 },
             { clipPath: spec.waveClip[2], opacity: 0 },
           ],
           {
-            duration: 920,
+            duration: 780,
             easing: 'cubic-bezier(0.25, 0.9, 0.3, 1)',
             fill: 'forwards',
             pseudoElement: '::view-transition-new(skin-wave)',
           }
         );
+
+        meshAnim.onfinish = () => {
+          if (skinWaveEl) skinWaveEl.style.opacity = '0';
+        };
       })
       .catch(() => {
         hideThemeMesh();
