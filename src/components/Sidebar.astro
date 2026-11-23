@@ -353,8 +353,6 @@ const themes = [
     daylight: '#F1F2F4',
   };
 
-  let activeWaveAnim: Animation | null = null;
-
   interface ThemeTransitionSpec {
     patternId: string;
     rootClip: [string, string];
@@ -430,34 +428,19 @@ const themes = [
     syncThemeButtons(next, locale);
   }
 
-  // Run the transient SVG pattern sweep alongside the View Transition clip-path.
-  function runThemeWave(spec: ThemeTransitionSpec, accentColor: string) {
+  // Prepare the transient SVG overlay so View Transitions captures it in ::view-transition-new(skin-wave).
+  function showThemeMesh(spec: ThemeTransitionSpec, accentColor: string) {
     if (!skinWaveEl) return;
-    activeWaveAnim?.cancel();
-
     if (skinRectEl) {
       skinRectEl.setAttribute('fill', `url(#${spec.patternId})`);
     }
     skinWaveEl.style.color = accentColor;
     skinWaveEl.classList.remove('hidden');
+  }
 
-    activeWaveAnim = skinWaveEl.animate(
-      [
-        { clipPath: spec.waveClip[0], opacity: 0.9 },
-        { clipPath: spec.waveClip[1], opacity: 0.55, offset: 0.45 },
-        { clipPath: spec.waveClip[2], opacity: 0 },
-      ],
-      {
-        duration: 640,
-        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        fill: 'forwards',
-      }
-    );
-
-    activeWaveAnim.onfinish = () => {
-      skinWaveEl.classList.add('hidden');
-      skinWaveEl.style.clipPath = '';
-    };
+  function hideThemeMesh() {
+    if (!skinWaveEl) return;
+    skinWaveEl.classList.add('hidden');
   }
 
   function switchTheme(next: ThemeId, triggerBtn: HTMLButtonElement) {
@@ -473,7 +456,7 @@ const themes = [
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const startTransition = (
       document as Document & {
-        startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+        startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
       }
     ).startViewTransition;
 
@@ -494,9 +477,8 @@ const themes = [
 
     const transition = startTransition.call(document, () => {
       applyTheme(next);
+      showThemeMesh(spec, accentColor);
     });
-
-    runThemeWave(spec, accentColor);
 
     transition.ready
       .then(() => {
@@ -505,15 +487,32 @@ const themes = [
             clipPath: spec.rootClip,
           },
           {
-            duration: 580,
+            duration: 600,
             easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
             pseudoElement: '::view-transition-new(root)',
           }
         );
+
+        document.documentElement.animate(
+          [
+            { clipPath: spec.waveClip[0], opacity: 0.95 },
+            { clipPath: spec.waveClip[1], opacity: 0.7, offset: 0.5 },
+            { clipPath: spec.waveClip[2], opacity: 0 },
+          ],
+          {
+            duration: 660,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            pseudoElement: '::view-transition-new(skin-wave)',
+          }
+        );
       })
       .catch(() => {
-        // Fallback if the transition is interrupted by another rapid click.
+        hideThemeMesh();
       });
+
+    transition.finished.finally(() => {
+      hideThemeMesh();
+    });
   }
 
   const initialTheme = (document.documentElement.dataset.theme as ThemeId | undefined) ?? 'precision';

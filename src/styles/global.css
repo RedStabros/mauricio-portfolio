@@ -159,11 +159,17 @@ html[data-theme="daylight"] {
   background-color: var(--color-accent);
 }
 
-/* Disable default crossfade so the custom radial clip-path transition drives theme swaps */
+/* Disable default crossfade so custom clip-path transitions drive theme swaps */
 ::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-new(root),
+::view-transition-old(skin-wave),
+::view-transition-new(skin-wave) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+::view-transition-group(root) {
+  z-index: 1;
 }
 
 ::view-transition-old(root) {
@@ -174,13 +180,22 @@ html[data-theme="daylight"] {
   z-index: 2;
 }
 
-/* Transient hexagonal mesh overlay rendered only during a theme swap */
+/* Render the transient SVG mesh in its own View Transition layer above root */
+::view-transition-group(skin-wave) {
+  z-index: 10;
+  pointer-events: none;
+}
+
+::view-transition-old(skin-wave) {
+  display: none;
+}
+
 .cyber-skin-wave {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0;
+  view-transition-name: skin-wave;
 }
 
 @keyframes skeleton-scan-sweep {
