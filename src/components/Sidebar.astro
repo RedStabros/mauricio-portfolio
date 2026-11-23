@@ -478,9 +478,8 @@ const themes = [
     transition.ready
       .then(() => {
         const sweepTiming: KeyframeAnimationOptions = {
-          duration: 520,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards',
+          duration: 500,
+          easing: 'ease-in-out',
         };
 
         document.documentElement.animate(
@@ -488,14 +487,12 @@ const themes = [
           { ...sweepTiming, pseudoElement: '::view-transition-new(root)' }
         );
 
-        // Animate mesh clip-path on the exact same two-keyframe curve as root (no mid-sweep pause),
-        // and fade opacity on a separate ease-in curve that finishes just before root teardown.
         document.documentElement.animate(
           { clipPath: spec.clip },
           { ...sweepTiming, pseudoElement: '::view-transition-new(skin-wave)' }
         );
 
-        const fadeAnim = document.documentElement.animate(
+        document.documentElement.animate(
           { opacity: [0.95, 0] },
           {
             duration: 500,
@@ -504,10 +501,6 @@ const themes = [
             pseudoElement: '::view-transition-new(skin-wave)',
           }
         );
-
-        fadeAnim.onfinish = () => {
-          if (skinWaveEl) skinWaveEl.style.opacity = '0';
-        };
       })
       .catch(() => {
         hideThemeMesh();

@@ -159,7 +159,9 @@ html[data-theme="daylight"] {
   background-color: var(--color-accent);
 }
 
-/* Disable default crossfade so custom clip-path transitions drive theme swaps */
+/* Disable default browser View Transition animations so JS Web Animations drive the sweep cleanly */
+::view-transition-group(root),
+::view-transition-group(skin-wave),
 ::view-transition-old(root),
 ::view-transition-new(root),
 ::view-transition-old(skin-wave),
