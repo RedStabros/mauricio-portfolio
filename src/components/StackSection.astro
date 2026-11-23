@@ -1,0 +1,34 @@
+---
+import { PROFILE, UI_COPY } from '../data/profile';
+
+// Categorized technical skills rendered as a two-column hairline matrix.
+---
+
+<section id="stack" data-section-id="stack" class="scroll-mt-10 space-y-6">
+  <h2 class="text-xl font-semibold tracking-tight text-text-primary">
+    <span data-lang="es">{UI_COPY.es.sections.stackTitle}</span>
+    <span data-lang="en">{UI_COPY.en.sections.stackTitle}</span>
+  </h2>
+
+  <dl class="divide-y divide-border border-y border-border">
+    {
+      PROFILE.stack.map((category) => (
+        <div class="grid grid-cols-1 gap-3 py-4 sm:grid-cols-[160px_1fr] sm:items-baseline sm:gap-6">
+          <dt class="font-mono text-xs font-medium tracking-wider text-text-muted uppercase">
+            <span data-lang="es">{category.label.es}</span>
+            <span data-lang="en">{category.label.en}</span>
+          </dt>
+          <dd>
+            <ul class="flex flex-wrap gap-2">
+              {category.items.map((item) => (
+                <li class="rounded border border-border bg-surface px-2.5 py-1 font-mono text-xs text-text-primary transition-colors duration-150 hover:border-border-hover">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

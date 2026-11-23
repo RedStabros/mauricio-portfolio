@@ -1,0 +1,170 @@
+---
+import '../styles/global.css';
+import { PROFILE, UI_COPY } from '../data/profile';
+
+// Shared page shell: loads Geist fonts, sets technical SEO metadata and JSON-LD,
+// and initializes saved locale and theme before first paint via an external script.
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = UI_COPY.es.metaTitle,
+  description = UI_COPY.es.metaDescription,
+} = Astro.props;
+
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://mauriciosaldarriaga.dev';
+const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+const ogImageUrl = `${siteOrigin}/og-image.png`;
+
+// Structured data for Google Knowledge Graph and rich search indexing.
+// JSON-LD is non-executable data, so it works cleanly under strict script-src 'self' CSP.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteOrigin}/#website`,
+      url: `${siteOrigin}/`,
+      name: `${PROFILE.shortName} - Portfolio`,
+      description,
+      inLanguage: ['es', 'en'],
+    },
+    {
+      '@type': 'Person',
+      '@id': `${siteOrigin}/#person`,
+      name: PROFILE.name,
+      alternateName: PROFILE.shortName,
+      url: `${siteOrigin}/`,
+      image: `${siteOrigin}/avatar-photo.jpg`,
+      jobTitle: 'Full-Stack & Mobile Engineer',
+      description: PROFILE.bio.en,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bogotá',
+        addressCountry: 'CO',
+      },
+      sameAs: [
+        'https://github.com/RedStabros',
+        'https://www.linkedin.com/in/maurosaldagarcia',
+        'https://ciudadfriki.app/',
+      ],
+      knowsAbout: [
+        'React Native',
+        'Expo',
+        'Vue.js',
+        'React.js',
+        'TypeScript',
+        'Astro',
+        'Tailwind CSS',
+        'Node.js',
+        'PostgreSQL',
+        'Supabase',
+        'Prisma ORM',
+        'Cloudflare Pages',
+        'Game Development',
+      ],
+      alumniOf: [
+        { '@type': 'CollegeOrUniversity', name: 'Universidad Nacional Abierta y a Distancia - UNAD Colombia' },
+        { '@type': 'EducationalOrganization', name: 'Servicio Nacional de Aprendizaje (SENA)' },
+      ],
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="es" data-locale="es" data-theme="precision">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={PROFILE.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="theme-color" content="#09090B" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={PROFILE.shortName} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mauricio Saldarriaga - Full-Stack & Mobile Engineer Portfolio" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline src="/locale-init.js"></script>
+  </head>
+  <body class="bg-bg-base text-text-primary antialiased">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:border focus:border-accent focus:bg-bg-base focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-text-primary"
+    >
+      <span data-lang="es">{UI_COPY.es.skipToContent}</span>
+      <span data-lang="en">{UI_COPY.en.skipToContent}</span>
+    </a>
+
+    <slot />
+
+    <!-- Non-blocking first-visit scan line (shown once per session without hiding content) -->
+    <div id="intro-scan" class="intro-scan hidden" aria-hidden="true">
+      <div id="intro-scan-beam" class="intro-scan-beam"></div>
+    </div>
+
+    <!-- Transient SVG pattern overlay shown only while transitioning between themes -->
+    <div id="cyber-skin-wave" class="cyber-skin-wave hidden" aria-hidden="true">
+      <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Precision: hexagonal cybernetic mesh -->
+          <pattern id="hex-skin-grid" width="32" height="55.42" patternUnits="userSpaceOnUse">
+            <path
+              d="M16 0 L32 9.24 L32 27.71 L16 36.95 L0 27.71 L0 9.24 Z M16 36.95 L16 55.42"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.9"
+              stroke-opacity="0.42"
+            />
+          </pattern>
+          <!-- Editorial: orthogonal architectural blueprint grid -->
+          <pattern id="arch-skin-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path
+              d="M 32 0 L 0 0 0 32"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              stroke-opacity="0.34"
+            />
+          </pattern>
+          <!-- Daylight: fine technical notebook dot grid -->
+          <pattern id="paper-dot-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.15" fill="currentColor" fill-opacity="0.36" />
+          </pattern>
+        </defs>
+        <rect id="cyber-skin-rect" width="100%" height="100%" fill="url(#hex-skin-grid)" />
+      </svg>
+    </div>
+  </body>
+</html>

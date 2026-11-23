@@ -1,0 +1,146 @@
+---
+import { PROFILE, UI_COPY } from '../data/profile';
+
+// Chronological work history ledger followed by a three-column education strip.
+---
+
+<section id="experience" data-section-id="experience" class="scroll-mt-10 space-y-8">
+  <h2 class="text-xl font-semibold tracking-tight text-text-primary">
+    <span data-lang="es">{UI_COPY.es.sections.experienceTitle}</span>
+    <span data-lang="en">{UI_COPY.en.sections.experienceTitle}</span>
+  </h2>
+
+  <!-- Work history -->
+  <ol class="divide-y divide-border border-y border-border">
+    {
+      PROFILE.experience.map((item) => (
+        <li class="grid grid-cols-1 gap-3 py-6 sm:grid-cols-[160px_1fr] sm:gap-6">
+          <div class="space-y-0.5 font-mono text-xs text-text-muted tabular-nums">
+            <p>
+              <span data-lang="es">{item.period.es}</span>
+              <span data-lang="en">{item.period.en}</span>
+            </p>
+            <p class="text-[11px]">{item.location}</p>
+          </div>
+
+          <div class="space-y-2.5">
+            <div>
+              <h3 class="text-sm font-semibold text-text-primary">{item.company}</h3>
+              <p class="text-xs text-text-secondary">
+                <span data-lang="es">{item.role.es}</span>
+                <span data-lang="en">{item.role.en}</span>
+              </p>
+            </div>
+
+            <p class="max-w-[65ch] text-sm leading-relaxed text-text-secondary">
+              <span data-lang="es">{item.summary.es}</span>
+              <span data-lang="en">{item.summary.en}</span>
+            </p>
+
+            <ul class="flex flex-wrap gap-1.5 pt-1">
+              {item.stack.map((tech) => (
+                <li class="rounded border border-border bg-surface px-2 py-0.5 font-mono text-[11px] text-text-muted">
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <!-- Education -->
+  <div class="space-y-4">
+    <h3 class="font-mono text-xs font-medium tracking-wider text-text-muted uppercase">
+      <span data-lang="es">{UI_COPY.es.sections.educationLabel}</span>
+      <span data-lang="en">{UI_COPY.en.sections.educationLabel}</span>
+    </h3>
+    <div class="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      {
+        PROFILE.education.map((edu) => (
+          <div class="py-4 sm:px-4 sm:first:pl-0 sm:last:pr-0">
+            <p class="font-mono text-xs text-text-muted tabular-nums">{edu.period}</p>
+            <p class="mt-1.5 text-sm font-medium text-text-primary">{edu.institution}</p>
+            <p class="mt-1 text-xs leading-relaxed text-text-secondary">
+              <span data-lang="es">{edu.degree.es}</span>
+              <span data-lang="en">{edu.degree.en}</span>
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Languages -->
+  <div class="space-y-4">
+    <h3 class="font-mono text-xs font-medium tracking-wider text-text-muted uppercase">
+      <span data-lang="es">{UI_COPY.es.sections.languagesLabel}</span>
+      <span data-lang="en">{UI_COPY.en.sections.languagesLabel}</span>
+    </h3>
+    <div class="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      {
+        PROFILE.languages.map((lang) => (
+          <div class="py-4 sm:px-4 sm:first:pl-0 sm:last:pr-0">
+            <p class="text-sm font-medium text-text-primary">
+              <span data-lang="es">{lang.name.es}</span>
+              <span data-lang="en">{lang.name.en}</span>
+            </p>
+            <p class="mt-1 font-mono text-xs text-text-secondary">
+              <span data-lang="es">{lang.level.es}</span>
+              <span data-lang="en">{lang.level.en}</span>
+            </p>
+            {lang.detail && (
+              <p class="mt-1 text-xs text-text-muted">
+                <span data-lang="es">{lang.detail.es}</span>
+                <span data-lang="en">{lang.detail.en}</span>
+              </p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Relocation & Non-profit collaboration -->
+  <div class="space-y-4">
+    <h3 class="font-mono text-xs font-medium tracking-wider text-text-muted uppercase">
+      <span data-lang="es">{UI_COPY.es.sections.collaborationLabel}</span>
+      <span data-lang="en">{UI_COPY.en.sections.collaborationLabel}</span>
+    </h3>
+    <div class="grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+      <div class="py-5 sm:pr-6">
+        <p class="text-sm font-medium text-text-primary">
+          <span data-lang="es">{PROFILE.collaboration.relocationTitle.es}</span>
+          <span data-lang="en">{PROFILE.collaboration.relocationTitle.en}</span>
+        </p>
+        <p class="mt-2 text-xs leading-relaxed text-text-secondary">
+          <span data-lang="es">{PROFILE.collaboration.relocationBody.es}</span>
+          <span data-lang="en">{PROFILE.collaboration.relocationBody.en}</span>
+        </p>
+      </div>
+
+      <div class="py-5 sm:pl-6">
+        <p class="text-sm font-medium text-text-primary">
+          <span data-lang="es">{PROFILE.collaboration.nonProfitTitle.es}</span>
+          <span data-lang="en">{PROFILE.collaboration.nonProfitTitle.en}</span>
+        </p>
+        <p class="mt-2 text-xs leading-relaxed text-text-secondary">
+          <span data-lang="es">{PROFILE.collaboration.nonProfitBody.es}</span>
+          <span data-lang="en">{PROFILE.collaboration.nonProfitBody.en}</span>
+        </p>
+        <a
+          href="mailto:udcarkangel@gmail.com?subject=Non-profit%20project%20collaboration"
+          class="mt-3 inline-flex items-center gap-1.5 font-mono text-xs text-accent transition-colors duration-150 hover:text-accent-hover hover:underline"
+        >
+          <span data-lang="es">{PROFILE.collaboration.nonProfitCta.es}</span>
+          <span data-lang="en">{PROFILE.collaboration.nonProfitCta.en}</span>
+          <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+            <path d="M7 17 17 7" />
+            <path d="M7 7h10v10" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

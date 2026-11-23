@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import FeaturedSection from '../components/FeaturedSection.astro';
+import GitHubProjectsSection from '../components/GitHubProjectsSection.astro';
+import StackSection from '../components/StackSection.astro';
+import ExperienceSection from '../components/ExperienceSection.astro';
+import { PROFILE, UI_COPY } from '../data/profile';
+
+// Main portfolio page: sticky left rail on desktop paired with a scrolling
+// content column ordered so shipped production work appears first.
+---
+
+<BaseLayout>
+  <div class="mx-auto min-h-dvh max-w-[1280px] lg:flex">
+    <Sidebar />
+
+    <main id="main-content" class="flex-1 px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
+      <div class="mx-auto max-w-3xl space-y-20">
+        <FeaturedSection />
+        <GitHubProjectsSection />
+        <StackSection />
+        <ExperienceSection />
+
+        <footer class="border-t border-border pt-8 pb-4 font-mono text-xs text-text-muted">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span>© {new Date().getFullYear()} {PROFILE.shortName}</span>
+            <span>
+              <span data-lang="es">{UI_COPY.es.footer.builtWith}</span>
+              <span data-lang="en">{UI_COPY.en.footer.builtWith}</span>
+            </span>
+          </div>
+        </footer>
+      </div>
+    </main>
+  </div>
+</BaseLayout>

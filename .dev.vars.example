@@ -1,0 +1,10 @@
+# Local environment variables for Cloudflare Pages Functions (wrangler pages dev).
+# Copy this file to .dev.vars and fill in your credentials.
+# Keep .dev.vars out of Git; it is ignored in .gitignore.
+
+# GitHub Personal Access Token (fine-grained token with read-only Metadata access,
+# or a classic PAT with repo scope if you want private repos tagged "portfolio").
+GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# GitHub handle matching the repository owner (also set in wrangler.toml).
+GITHUB_USERNAME=RedStabros

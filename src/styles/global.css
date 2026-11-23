@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+@theme {
+  /* Theme 1 default: Precision Engineering (Dark Emerald) */
+  --color-bg-base: #09090B;
+  --color-surface: #111113;
+  --color-surface-elevated: #18181B;
+  --color-border: #27272A;
+  --color-border-hover: #3F3F46;
+  --color-text-primary: #FAFAFA;
+  --color-text-secondary: #A1A1AA;
+  /* Keeps small metadata readable above 5.7:1 contrast on #111113 */
+  --color-text-muted: #8E8E98;
+  --color-accent: #10B981;
+  --color-accent-hover: #059669;
+  --color-accent-fg: #09090B;
+  --color-accent-secondary: #10B981;
+  --color-accent-subtle: rgba(16, 185, 129, 0.1);
+  --color-accent-border: rgba(16, 185, 129, 0.3);
+
+  /* Single fixed font pairing across all themes to prevent layout jumps during transitions */
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Theme 2: Editorial Architecture (Dark Amber) */
+html[data-theme="editorial"] {
+  color-scheme: dark;
+  --color-bg-base: #0C0D10;
+  --color-surface: #14161B;
+  --color-surface-elevated: #1B1E26;
+  --color-border: #23262F;
+  --color-border-hover: #363B49;
+  --color-text-primary: #F4F4F6;
+  --color-text-secondary: #8B92A5;
+  --color-text-muted: #858C9E;
+  --color-accent: #F59E0B;
+  --color-accent-hover: #D97706;
+  --color-accent-fg: #0C0D10;
+  --color-accent-secondary: #F59E0B;
+  --color-accent-subtle: rgba(245, 158, 11, 0.12);
+  --color-accent-border: rgba(245, 158, 11, 0.32);
+}
+
+/* Theme 3: Daylight Paper (High-contrast cool paper canvas with crisp white surfaces) */
+html[data-theme="daylight"] {
+  color-scheme: light;
+  --color-bg-base: #F1F2F4;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #E6E8EC;
+  --color-border: #C9CDD5;
+  --color-border-hover: #71717A;
+  --color-text-primary: #09090B;
+  --color-text-secondary: #3F3F46;
+  --color-text-muted: #52525B;
+  --color-accent: #047857;
+  --color-accent-hover: #065F46;
+  --color-accent-fg: #FFFFFF;
+  --color-accent-secondary: #059669;
+  --color-accent-subtle: rgba(4, 120, 87, 0.12);
+  --color-accent-border: rgba(4, 120, 87, 0.45);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    caret-color: var(--color-accent);
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a, button {
+    touch-action: manipulation;
+    text-underline-offset: 4px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-text-primary);
+  }
+
+  /* Slim scrollbar matching the active theme border */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-base);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-hover);
+  }
+}
+
+/* Shared 1px bordered surface for discrete project cards */
+.precision-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.precision-card:hover {
+  border-color: var(--color-border-hover);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scale the sidebar indicator with transform so hover and scroll spy avoid layout reflow */
+.nav-indicator {
+  transform: scaleX(0.5);
+  transform-origin: left center;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.group:hover .nav-indicator {
+  transform: scaleX(0.8);
+}
+
+.nav-link-active {
+  color: var(--color-text-primary);
+}
+
+.nav-link-active .nav-indicator {
+  transform: scaleX(1);
+  background-color: var(--color-accent);
+}
+
+/* Disable default crossfade so the custom radial clip-path transition drives theme swaps */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* Transient hexagonal mesh overlay rendered only during a theme swap */
+.cyber-skin-wave {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@keyframes skeleton-scan-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.skeleton-bar {
+  background-color: var(--color-surface-elevated);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+/* Theme-aware technical scan sweep inside GitHub Sync skeleton cards */
+.skeleton-card-scan {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-accent-subtle) 48%,
+    var(--color-accent-border) 50%,
+    var(--color-accent-subtle) 52%,
+    transparent 100%
+  );
+  animation: skeleton-scan-sweep 1.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Non-blocking first-visit scan line (never hides content or affects LCP) */
+.intro-scan {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.intro-scan-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background-color: var(--color-accent);
+  opacity: 0.75;
+}
+
+/* Turn off smooth scroll and pulse motion when the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .skeleton-bar,
+  .skeleton-card-scan::after {
+    animation: none;
+  }
+  .nav-indicator {
+    transition: none;
+  }
+}
+
+/* Toggle localized spans in CSS so switching ES and EN needs no DOM re-render */
+html[data-locale="es"] [data-lang="en"],
+html[data-locale="en"] [data-lang="es"] {
+  display: none !important;
+}

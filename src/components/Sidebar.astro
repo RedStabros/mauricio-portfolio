@@ -1,0 +1,638 @@
+---
+import fs from 'node:fs';
+import { PROFILE, UI_COPY } from '../data/profile';
+
+// Sticky desktop sidebar and compact mobile header with language toggle,
+// CV download, clipboard email action, and section anchor links.
+const hasRealPhoto = fs.existsSync(new URL('../../public/avatar-photo.jpg', import.meta.url));
+const navItems = [
+  { href: '#featured', es: UI_COPY.es.nav.featured, en: UI_COPY.en.nav.featured },
+  { href: '#repos', es: UI_COPY.es.nav.repos, en: UI_COPY.en.nav.repos },
+  { href: '#stack', es: UI_COPY.es.nav.stack, en: UI_COPY.en.nav.stack },
+  { href: '#experience', es: UI_COPY.es.nav.experience, en: UI_COPY.en.nav.experience },
+];
+
+const themes = [
+  { id: 'precision', dot: '#10B981', wave: '#10B981', es: 'Ingeniería de Precisión', en: 'Precision Engineering' },
+  { id: 'editorial', dot: '#F59E0B', wave: '#F59E0B', es: 'Arquitectura Editorial', en: 'Editorial Architecture' },
+  { id: 'daylight', dot: '#FAFAFA', wave: '#047857', es: 'Daylight Papel', en: 'Daylight Paper' },
+] as const;
+---
+
+<aside
+  class="w-full border-b border-border bg-bg-base lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-[376px] lg:shrink-0 lg:flex-col lg:justify-between lg:overflow-y-auto lg:border-r lg:border-b-0 xl:w-[400px]"
+>
+  <div class="flex flex-col gap-5 px-6 py-7 lg:px-6 lg:py-8 xl:gap-6 xl:px-9 xl:py-11">
+    <!-- Top Status Row, Theme Switcher & Locale Switcher -->
+    <div class="flex items-center justify-between gap-2">
+      <div class="inline-flex min-w-0 items-center gap-1.5 font-mono text-xs text-text-muted">
+        <span class="h-2 w-2 shrink-0 rounded-full bg-accent-secondary" aria-hidden="true"></span>
+        <span class="truncate">
+          <span data-lang="es">Bogotá · Remoto</span>
+          <span data-lang="en">Bogotá · Remote</span>
+        </span>
+      </div>
+
+      <div class="flex shrink-0 items-center gap-1.5">
+        <!-- Color system switcher (Precision / Editorial / Stone) -->
+        <div
+          class="inline-flex items-center gap-0.5 rounded border border-border bg-surface p-0.5"
+          role="group"
+          aria-label="Color system switcher"
+        >
+          {
+            themes.map((theme) => (
+              <button
+                type="button"
+                data-theme-btn={theme.id}
+                data-theme-accent={theme.wave}
+                data-theme-label-es={theme.es}
+                data-theme-label-en={theme.en}
+                title={theme.es}
+                aria-label={theme.es}
+                aria-pressed={theme.id === 'precision' ? 'true' : 'false'}
+                class="theme-btn inline-flex h-[28px] w-[28px] cursor-pointer items-center justify-center rounded-sm transition-colors duration-150 hover:bg-border/60"
+              >
+                <span
+                  class:list={[
+                    'h-2.5 w-2.5 rounded-full',
+                    theme.id === 'daylight' && 'border border-zinc-400',
+                  ]}
+                  style={`background-color: ${theme.dot}`}
+                  aria-hidden="true"
+                />
+              </button>
+            ))
+          }
+        </div>
+
+        <div
+          class="inline-flex shrink-0 items-center rounded border border-border bg-surface p-0.5 font-mono text-xs"
+          role="group"
+          aria-label="Language switcher"
+        >
+          <button
+            type="button"
+            data-locale-btn="es"
+            class="locale-btn min-h-[28px] min-w-[34px] cursor-pointer rounded-sm px-2 py-0.5 transition-colors duration-150"
+            aria-pressed="true"
+          >
+            ES
+          </button>
+          <button
+            type="button"
+            data-locale-btn="en"
+            class="locale-btn min-h-[28px] min-w-[34px] cursor-pointer rounded-sm px-2 py-0.5 transition-colors duration-150"
+            aria-pressed="false"
+          >
+            EN
+          </button>
+        </div>
+      </div>
+    </div>
+    <span id="theme-live-status" class="sr-only" aria-live="polite"></span>
+
+    <!-- Identity Block -->
+    <div class="space-y-3.5">
+      <div class="flex items-center gap-4">
+        <button
+          id="avatar-toggle-btn"
+          type="button"
+          data-has-photo={String(hasRealPhoto)}
+          aria-pressed="false"
+          title={hasRealPhoto ? 'Alternar foto / avatar pixel-art' : 'Avatar Game Dev (agrega public/avatar-photo.jpg para modo híbrido)'}
+          aria-label="Toggle profile avatar view"
+          class="group/avatar relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-md border border-border bg-surface transition-colors duration-150 hover:border-border-hover"
+        >
+          {
+            hasRealPhoto ? (
+              <>
+                <img
+                  src="/avatar-photo.jpg"
+                  alt={PROFILE.shortName}
+                  width="80"
+                  height="80"
+                  decoding="async"
+                  class="avatar-photo h-full w-full scale-125 object-cover object-[28%_52%] transition-opacity duration-150 group-hover/avatar:opacity-0"
+                />
+                <img
+                  src="/avatar-game.jpg"
+                  alt=""
+                  width="80"
+                  height="80"
+                  decoding="async"
+                  aria-hidden="true"
+                  class="avatar-game absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-150 [image-rendering:pixelated] group-hover/avatar:opacity-100"
+                />
+              </>
+            ) : (
+              <img
+                src="/avatar-game.jpg"
+                alt={PROFILE.shortName}
+                width="80"
+                height="80"
+                decoding="async"
+                class="h-full w-full object-cover [image-rendering:pixelated]"
+              />
+            )
+          }
+        </button>
+
+        <div class="min-w-0 space-y-1">
+          <h1 class="text-xl font-semibold tracking-tight text-text-primary sm:text-2xl sm:leading-[1.15]">
+            {PROFILE.shortName}
+          </h1>
+          <p class="font-mono text-[11px] tracking-wide text-accent uppercase">
+            {PROFILE.role.es}
+          </p>
+        </div>
+      </div>
+
+      <p class="text-sm leading-relaxed text-text-secondary">
+        <span data-lang="es">{PROFILE.bio.es}</span>
+        <span data-lang="en">{PROFILE.bio.en}</span>
+      </p>
+    </div>
+
+    <!-- Primary CTA: Download CV (language-aware ES/EN PDF) + Quick Copy Email -->
+    <div class="flex flex-wrap items-center gap-2.5">
+      <a
+        id="download-cv-link"
+        href="/cv-es.pdf"
+        download="CV-MauricioSaldarriaga-ES.pdf"
+        class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded border border-accent bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-colors duration-150 hover:border-accent-hover hover:bg-accent-hover"
+      >
+        <svg
+          class="h-4 w-4 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span data-lang="es">{UI_COPY.es.downloadCv}</span>
+        <span data-lang="en">{UI_COPY.en.downloadCv}</span>
+      </a>
+
+      <button
+        id="copy-email-btn"
+        type="button"
+        data-email="udcarkangel@gmail.com"
+        class="inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded border border-border bg-surface px-3.5 py-2 font-mono text-xs text-text-secondary transition-colors duration-150 hover:border-border-hover hover:text-text-primary"
+      >
+        <svg
+          class="h-3.5 w-3.5 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        <span id="copy-email-default">
+          <span data-lang="es">{UI_COPY.es.copyEmail}</span>
+          <span data-lang="en">{UI_COPY.en.copyEmail}</span>
+        </span>
+        <span id="copy-email-done" class="hidden">
+          <span data-lang="es">{UI_COPY.es.emailCopied}</span>
+          <span data-lang="en">{UI_COPY.en.emailCopied}</span>
+        </span>
+      </button>
+      <span id="copy-email-status" class="sr-only" aria-live="polite"></span>
+    </div>
+
+    <!-- Desktop Anchor Navigation -->
+    <nav class="hidden pt-3 lg:block" aria-label="Section navigation">
+      <ul class="space-y-0.5">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                data-nav-link={item.href.slice(1)}
+                class="group flex min-h-[36px] items-center gap-3 py-1.5 text-sm text-text-secondary transition-colors duration-150 hover:text-text-primary"
+              >
+                <span class="nav-indicator h-px w-6 bg-border group-hover:bg-text-secondary" aria-hidden="true" />
+                <span data-lang="es">{item.es}</span>
+                <span data-lang="en">{item.en}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Mobile Anchor Navigation Strip -->
+  <nav
+    class="flex items-center justify-between gap-1 border-t border-border px-4 py-1.5 lg:hidden"
+    aria-label="Mobile section navigation"
+  >
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class="inline-flex min-h-[36px] shrink-0 items-center rounded border border-transparent px-2 py-1 font-mono text-[11px] text-text-secondary transition-colors duration-150 hover:border-border hover:text-text-primary"
+        >
+          <span data-lang="es">{item.es}</span>
+          <span data-lang="en">{item.en}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <!-- Bottom Social Links -->
+  <div class="border-t border-border px-6 py-4 lg:px-6 lg:py-5 xl:px-9 xl:py-6">
+    <ul class="flex flex-wrap items-center gap-4 lg:flex-col lg:items-start lg:gap-2">
+      {
+        PROFILE.socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              target={social.icon === 'mail' ? undefined : '_blank'}
+              rel={social.icon === 'mail' ? undefined : 'noopener noreferrer'}
+              class="group inline-flex min-h-[28px] items-center gap-2.5 text-xs text-text-secondary transition-colors duration-150 hover:text-text-primary"
+            >
+              {social.icon === 'github' && (
+                <svg class="h-4 w-4 shrink-0 text-text-muted transition-colors duration-150 group-hover:text-text-primary" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+                </svg>
+              )}
+              {social.icon === 'linkedin' && (
+                <svg class="h-4 w-4 shrink-0 text-text-muted transition-colors duration-150 group-hover:text-text-primary" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z" />
+                </svg>
+              )}
+              {social.icon === 'mail' && (
+                <svg class="h-4 w-4 shrink-0 text-text-muted transition-colors duration-150 group-hover:text-text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+              )}
+              <span class="font-mono">{social.handle}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</aside>
+
+<script>
+  import { UI_COPY } from '../data/profile';
+
+  // Update aria-pressed and active styles on the ES/EN buttons, and point CV download to the matching PDF.
+  const cvDownloadLink = document.getElementById('download-cv-link') as HTMLAnchorElement | null;
+
+  function syncLocaleButtons(locale: string) {
+    if (cvDownloadLink) {
+      if (locale === 'en') {
+        cvDownloadLink.href = '/cv-en.pdf';
+        cvDownloadLink.download = 'CV-MauricioSaldarriaga-EN.pdf';
+      } else {
+        cvDownloadLink.href = '/cv-es.pdf';
+        cvDownloadLink.download = 'CV-MauricioSaldarriaga-ES.pdf';
+      }
+    }
+    document.querySelectorAll<HTMLButtonElement>('[data-locale-btn]').forEach((btn) => {
+      const isActive = btn.dataset.localeBtn === locale;
+      btn.setAttribute('aria-pressed', String(isActive));
+      if (isActive) {
+        btn.classList.add('bg-border', 'text-text-primary');
+        btn.classList.remove('text-text-muted');
+      } else {
+        btn.classList.remove('bg-border', 'text-text-primary');
+        btn.classList.add('text-text-muted');
+      }
+    });
+  }
+
+  // Persist the selected language and notify dynamic sections like GitHub Sync.
+  function setLocale(next: 'es' | 'en') {
+    document.documentElement.dataset.locale = next;
+    document.documentElement.lang = next;
+    try {
+      localStorage.setItem('portfolio-locale', next);
+    } catch {
+      // Ignore storage errors in private browsing
+    }
+    syncLocaleButtons(next);
+    window.dispatchEvent(new CustomEvent('portfolio:localechange', { detail: { locale: next } }));
+  }
+
+  const initialLocale = document.documentElement.dataset.locale === 'en' ? 'en' : 'es';
+  syncLocaleButtons(initialLocale);
+
+  document.querySelectorAll<HTMLButtonElement>('[data-locale-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.localeBtn === 'en' ? 'en' : 'es';
+      setLocale(target);
+      syncThemeButtons(document.documentElement.dataset.theme ?? 'precision', target);
+    });
+  });
+
+  // Theme switcher with one distinct GPU clip-path transition per theme.
+  type ThemeId = 'precision' | 'editorial' | 'daylight';
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]');
+  const themeStatusEl = document.getElementById('theme-live-status');
+  const skinWaveEl = document.getElementById('cyber-skin-wave');
+  const skinRectEl = document.getElementById('cyber-skin-rect');
+  const THEME_BG_META: Record<ThemeId, string> = {
+    precision: '#09090B',
+    editorial: '#0C0D10',
+    daylight: '#F1F2F4',
+  };
+
+  let activeWaveAnim: Animation | null = null;
+
+  interface ThemeTransitionSpec {
+    patternId: string;
+    rootClip: [string, string];
+    waveClip: [string, string, string];
+  }
+
+  // Return the clip-path choreography and SVG pattern matched to the incoming theme.
+  function getTransitionSpec(
+    next: ThemeId,
+    originX: number,
+    originY: number,
+    maxRadius: number
+  ): ThemeTransitionSpec {
+    if (next === 'editorial') {
+      // Diagonal architectural blueprint sweep from left to right.
+      return {
+        patternId: 'arch-skin-grid',
+        rootClip: [
+          'polygon(0% 0%, 0% 0%, -25% 100%, 0% 100%)',
+          'polygon(0% 0%, 130% 0%, 100% 100%, 0% 100%)',
+        ],
+        waveClip: [
+          'polygon(0% 0%, 0% 0%, -25% 100%, 0% 100%)',
+          'polygon(0% 0%, 75% 0%, 45% 100%, 0% 100%)',
+          'polygon(0% 0%, 130% 0%, 100% 100%, 0% 100%)',
+        ],
+      };
+    }
+
+    if (next === 'daylight') {
+      // Top-down shutter reveal with a subtle engineering dot grid.
+      return {
+        patternId: 'paper-dot-grid',
+        rootClip: ['inset(0% 0% 100% 0%)', 'inset(0% 0% 0% 0%)'],
+        waveClip: ['inset(0% 0% 100% 0%)', 'inset(0% 0% 42% 0%)', 'inset(0% 0% 0% 0%)'],
+      };
+    }
+
+    // Precision: radial cybernetic hexagonal wave expanding from the clicked dot.
+    const startClip = `circle(0px at ${originX}px ${originY}px)`;
+    const midClip = `circle(${Math.round(maxRadius * 0.55)}px at ${originX}px ${originY}px)`;
+    const endClip = `circle(${Math.ceil(maxRadius)}px at ${originX}px ${originY}px)`;
+    return {
+      patternId: 'hex-skin-grid',
+      rootClip: [startClip, endClip],
+      waveClip: [startClip, midClip, endClip],
+    };
+  }
+
+  function syncThemeButtons(activeTheme: string, locale: string) {
+    themeButtons.forEach((btn) => {
+      const isSelected = btn.dataset.themeBtn === activeTheme;
+      const label = locale === 'en' ? btn.dataset.themeLabelEn : btn.dataset.themeLabelEs;
+      if (label) {
+        btn.title = label;
+        btn.setAttribute('aria-label', label);
+      }
+      btn.setAttribute('aria-pressed', String(isSelected));
+      btn.classList.toggle('bg-border', isSelected);
+    });
+  }
+
+  function applyTheme(next: ThemeId) {
+    document.documentElement.dataset.theme = next;
+    const metaTheme = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (metaTheme) metaTheme.content = THEME_BG_META[next];
+    try {
+      localStorage.setItem('portfolio-theme', next);
+    } catch {
+      // Ignore storage errors in private browsing.
+    }
+    const locale = document.documentElement.dataset.locale === 'en' ? 'en' : 'es';
+    syncThemeButtons(next, locale);
+  }
+
+  // Run the transient SVG pattern sweep alongside the View Transition clip-path.
+  function runThemeWave(spec: ThemeTransitionSpec, accentColor: string) {
+    if (!skinWaveEl) return;
+    activeWaveAnim?.cancel();
+
+    if (skinRectEl) {
+      skinRectEl.setAttribute('fill', `url(#${spec.patternId})`);
+    }
+    skinWaveEl.style.color = accentColor;
+    skinWaveEl.classList.remove('hidden');
+
+    activeWaveAnim = skinWaveEl.animate(
+      [
+        { clipPath: spec.waveClip[0], opacity: 0.9 },
+        { clipPath: spec.waveClip[1], opacity: 0.55, offset: 0.45 },
+        { clipPath: spec.waveClip[2], opacity: 0 },
+      ],
+      {
+        duration: 640,
+        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        fill: 'forwards',
+      }
+    );
+
+    activeWaveAnim.onfinish = () => {
+      skinWaveEl.classList.add('hidden');
+      skinWaveEl.style.clipPath = '';
+    };
+  }
+
+  function switchTheme(next: ThemeId, triggerBtn: HTMLButtonElement) {
+    const current = (document.documentElement.dataset.theme as ThemeId | undefined) ?? 'precision';
+    if (current === next) return;
+
+    const locale = document.documentElement.dataset.locale === 'en' ? 'en' : 'es';
+    const label = locale === 'en' ? triggerBtn.dataset.themeLabelEn : triggerBtn.dataset.themeLabelEs;
+    if (themeStatusEl && label) {
+      themeStatusEl.textContent = label;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const startTransition = (
+      document as Document & {
+        startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+      }
+    ).startViewTransition;
+
+    if (prefersReducedMotion || typeof startTransition !== 'function') {
+      applyTheme(next);
+      return;
+    }
+
+    const rect = triggerBtn.getBoundingClientRect();
+    const x = Math.round(rect.left + rect.width / 2);
+    const y = Math.round(rect.top + rect.height / 2);
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    const accentColor = triggerBtn.dataset.themeAccent ?? '#10B981';
+    const spec = getTransitionSpec(next, x, y, maxRadius);
+
+    const transition = startTransition.call(document, () => {
+      applyTheme(next);
+    });
+
+    runThemeWave(spec, accentColor);
+
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: spec.rootClip,
+          },
+          {
+            duration: 580,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          }
+        );
+      })
+      .catch(() => {
+        // Fallback if the transition is interrupted by another rapid click.
+      });
+  }
+
+  const initialTheme = (document.documentElement.dataset.theme as ThemeId | undefined) ?? 'precision';
+  syncThemeButtons(initialTheme, initialLocale);
+
+  // Run a non-blocking top-to-bottom scan line once per browser session on first visit.
+  const introScanEl = document.getElementById('intro-scan');
+  const introBeamEl = document.getElementById('intro-scan-beam');
+  if (introScanEl && introBeamEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let alreadySeen = false;
+    try {
+      alreadySeen = sessionStorage.getItem('portfolio-intro-seen') === '1';
+      if (!alreadySeen) sessionStorage.setItem('portfolio-intro-seen', '1');
+    } catch {
+      alreadySeen = true;
+    }
+
+    if (!alreadySeen) {
+      introScanEl.classList.remove('hidden');
+      const beamAnim = introBeamEl.animate(
+        [
+          { transform: 'translateY(0vh)', opacity: 0.85 },
+          { transform: 'translateY(100vh)', opacity: 0 },
+        ],
+        {
+          duration: 420,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'forwards',
+        }
+      );
+      beamAnim.onfinish = () => {
+        introScanEl.classList.add('hidden');
+      };
+    }
+  }
+
+  themeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.themeBtn as ThemeId | undefined;
+      if (next === 'precision' || next === 'editorial' || next === 'daylight') {
+        switchTheme(next, btn);
+      }
+    });
+  });
+
+  // Allow touch and keyboard users to toggle between the real photo and pixel-art avatar.
+  const avatarBtn = document.getElementById('avatar-toggle-btn') as HTMLButtonElement | null;
+  if (avatarBtn?.dataset.hasPhoto === 'true') {
+    const photoImg = avatarBtn.querySelector<HTMLImageElement>('.avatar-photo');
+    const gameImg = avatarBtn.querySelector<HTMLImageElement>('.avatar-game');
+    avatarBtn.addEventListener('click', () => {
+      const nextPressed = avatarBtn.getAttribute('aria-pressed') !== 'true';
+      avatarBtn.setAttribute('aria-pressed', String(nextPressed));
+      photoImg?.classList.toggle('opacity-0', nextPressed);
+      gameImg?.classList.toggle('opacity-100', nextPressed);
+    });
+  }
+
+  // Copy the email address and confirm both visually and in a live region.
+  // Toggles pre-rendered spans instead of writing innerHTML.
+  const copyBtn = document.getElementById('copy-email-btn') as HTMLButtonElement | null;
+  const copyDefaultEl = document.getElementById('copy-email-default');
+  const copyDoneEl = document.getElementById('copy-email-done');
+  const copyStatus = document.getElementById('copy-email-status');
+  let copyTimer: number | undefined;
+
+  copyBtn?.addEventListener('click', async () => {
+    const email = copyBtn.dataset.email;
+    if (!email || !copyDefaultEl || !copyDoneEl) return;
+
+    const locale = document.documentElement.dataset.locale === 'en' ? 'en' : 'es';
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      window.location.href = `mailto:${email}`;
+      return;
+    }
+
+    copyBtn.classList.add('border-accent-border', 'text-accent');
+    copyDefaultEl.classList.add('hidden');
+    copyDoneEl.classList.remove('hidden');
+    if (copyStatus) {
+      copyStatus.textContent = `${UI_COPY[locale].emailCopied}: ${email}`;
+    }
+
+    window.clearTimeout(copyTimer);
+    copyTimer = window.setTimeout(() => {
+      copyBtn.classList.remove('border-accent-border', 'text-accent');
+      copyDefaultEl.classList.remove('hidden');
+      copyDoneEl.classList.add('hidden');
+      if (copyStatus) copyStatus.textContent = '';
+    }, 2000);
+  });
+
+  // Highlight the sidebar anchor that matches the section currently in view.
+  const sections = document.querySelectorAll<HTMLElement>('section[data-section-id]');
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+
+  if (sections.length > 0 && navLinks.length > 0 && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = (entry.target as HTMLElement).dataset.sectionId;
+            navLinks.forEach((link) => {
+              const active = link.dataset.navLink === id;
+              link.classList.toggle('nav-link-active', active);
+              if (active) {
+                link.setAttribute('aria-current', 'location');
+              } else {
+                link.removeAttribute('aria-current');
+              }
+            });
+          }
+        });
+      },
+      { rootMargin: '-18% 0px -65% 0px', threshold: 0 }
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
+  }
+</script>
