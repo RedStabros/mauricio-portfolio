@@ -478,8 +478,8 @@ const themes = [
     transition.ready
       .then(() => {
         const sweepTiming: KeyframeAnimationOptions = {
-          duration: 580,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          duration: 520,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
           fill: 'forwards',
         };
 
@@ -498,8 +498,8 @@ const themes = [
         const fadeAnim = document.documentElement.animate(
           { opacity: [0.95, 0] },
           {
-            duration: 540,
-            easing: 'cubic-bezier(0.5, 0, 0.85, 0.4)',
+            duration: 500,
+            easing: 'ease-in',
             fill: 'forwards',
             pseudoElement: '::view-transition-new(skin-wave)',
           }
