@@ -158,9 +158,22 @@ const structuredData = {
               stroke-opacity="0.34"
             />
           </pattern>
-          <!-- Daylight: fine technical notebook dot grid -->
-          <pattern id="paper-dot-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1.15" fill="currentColor" fill-opacity="0.36" />
+          <!-- Daylight: black-ink technical drafting grid with crosshair intersections -->
+          <pattern id="paper-dot-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <path
+              d="M 28 0 L 0 0 0 28"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.85"
+              stroke-opacity="0.28"
+            />
+            <path
+              d="M 11 14 H 17 M 14 11 V 17"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+              stroke-opacity="0.45"
+            />
           </pattern>
         </defs>
         <rect id="cyber-skin-rect" width="100%" height="100%" fill="url(#hex-skin-grid)" />
