@@ -23,23 +23,23 @@
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Theme 2: Editorial Architecture (Dark Amber) */
-html[data-theme="editorial"] {
+/* Theme 2: Engineering Blueprint (Deep Blueprint Navy + Amber accent, WCAG AA/AAA) */
+html[data-theme="blueprint"] {
   color-scheme: dark;
-  --color-bg-base: #0C0D10;
-  --color-surface: #14161B;
-  --color-surface-elevated: #1B1E26;
-  --color-border: #23262F;
-  --color-border-hover: #363B49;
-  --color-text-primary: #F4F4F6;
-  --color-text-secondary: #8B92A5;
-  --color-text-muted: #858C9E;
+  --color-bg-base: #0B192C;
+  --color-surface: #112540;
+  --color-surface-elevated: #183254;
+  --color-border: #223F66;
+  --color-border-hover: #3B659C;
+  --color-text-primary: #F0F6FC;
+  --color-text-secondary: #A8C0DC;
+  --color-text-muted: #8FAAC9;
   --color-accent: #F59E0B;
   --color-accent-hover: #D97706;
-  --color-accent-fg: #0C0D10;
+  --color-accent-fg: #0B192C;
   --color-accent-secondary: #F59E0B;
-  --color-accent-subtle: rgba(245, 158, 11, 0.12);
-  --color-accent-border: rgba(245, 158, 11, 0.32);
+  --color-accent-subtle: rgba(245, 158, 11, 0.14);
+  --color-accent-border: rgba(245, 158, 11, 0.38);
 }
 
 /* Theme 3: Daylight Paper (High-contrast cool paper canvas with crisp white surfaces) */

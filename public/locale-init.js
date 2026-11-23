@@ -10,7 +10,7 @@
 
     var savedTheme = localStorage.getItem('portfolio-theme');
     var theme =
-      savedTheme === 'editorial' || savedTheme === 'daylight' || savedTheme === 'precision'
+      savedTheme === 'blueprint' || savedTheme === 'daylight' || savedTheme === 'precision'
         ? savedTheme
         : 'precision';
     root.dataset.theme = theme;

@@ -14,7 +14,7 @@ const navItems = [
 
 const themes = [
   { id: 'precision', dot: '#10B981', wave: '#10B981', es: 'Ingeniería de Precisión', en: 'Precision Engineering' },
-  { id: 'editorial', dot: '#F59E0B', wave: '#F59E0B', es: 'Arquitectura Editorial', en: 'Editorial Architecture' },
+  { id: 'blueprint', dot: '#2563EB', wave: '#F59E0B', es: 'Plano Azul (Blueprint)', en: 'Engineering Blueprint' },
   { id: 'daylight', dot: '#FAFAFA', wave: '#09090B', es: 'Daylight Papel', en: 'Daylight Paper' },
 ] as const;
 ---
@@ -342,14 +342,14 @@ const themes = [
   });
 
   // Theme switcher with one distinct GPU clip-path transition per theme.
-  type ThemeId = 'precision' | 'editorial' | 'daylight';
+  type ThemeId = 'precision' | 'blueprint' | 'daylight';
   const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]');
   const themeStatusEl = document.getElementById('theme-live-status');
   const skinWaveEl = document.getElementById('cyber-skin-wave');
   const skinRectEl = document.getElementById('cyber-skin-rect');
   const THEME_BG_META: Record<ThemeId, string> = {
     precision: '#09090B',
-    editorial: '#0C0D10',
+    blueprint: '#0B192C',
     daylight: '#F1F2F4',
   };
 
@@ -366,7 +366,7 @@ const themes = [
     originY: number,
     maxRadius: number
   ): ThemeTransitionSpec {
-    if (next === 'editorial') {
+    if (next === 'blueprint') {
       // Diagonal architectural blueprint sweep from left to right.
       return {
         patternId: 'arch-skin-grid',
@@ -555,7 +555,7 @@ const themes = [
   themeButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const next = btn.dataset.themeBtn as ThemeId | undefined;
-      if (next === 'precision' || next === 'editorial' || next === 'daylight') {
+      if (next === 'precision' || next === 'blueprint' || next === 'daylight') {
         switchTheme(next, btn);
       }
     });

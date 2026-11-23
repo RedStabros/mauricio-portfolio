@@ -42,7 +42,7 @@ The portfolio ships three high-contrast color themes controlled by `data-theme` 
 | Theme | Attribute | Base / Surface / Border | Accent | Mode |
 |---|---|---|---|---|
 | Precision Engineering | `precision` | `#09090B` / `#111113` / `#27272A` | `#10B981` | Dark |
-| Editorial Architecture | `editorial` | `#0C0D10` / `#14161B` / `#23262F` | `#F59E0B` | Dark |
+| Engineering Blueprint | `blueprint` | `#0B192C` / `#112540` / `#223F66` | `#F59E0B` | Blueprint |
 | Daylight Paper | `daylight` | `#F1F2F4` / `#FFFFFF` / `#C9CDD5` | `#047857` | Light |
 
 ### How the transition works

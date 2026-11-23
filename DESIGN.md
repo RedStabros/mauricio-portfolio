@@ -15,8 +15,8 @@ All components consume semantic CSS variables defined in `src/styles/global.css`
 ### 1. Precision Engineering (`data-theme="precision"`, default, dark)
 - **Palette:** `#09090B` base, `#111113` surface, `#27272A` border (`#3F3F46` hover), `#FAFAFA` primary text, `#A1A1AA` secondary text, `#8E8E98` muted metadata (5.7:1 on `#111113`), `#10B981` accent, `#09090B` accent foreground.
 
-### 2. Editorial Architecture (`data-theme="editorial"`, dark)
-- **Palette:** `#0C0D10` base, `#14161B` surface, `#23262F` border (`#363B49` hover), `#F4F4F6` primary text, `#8B92A5` secondary text, `#858C9E` muted metadata (5.1:1 on `#14161B`), `#F59E0B` accent, `#0C0D10` accent foreground.
+### 2. Engineering Blueprint (`data-theme="blueprint"`, color)
+- **Palette:** `#0B192C` base, `#112540` surface, `#223F66` border (`#3B659C` hover), `#F0F6FC` primary text, `#A8C0DC` secondary text, `#8FAAC9` muted metadata, `#F59E0B` amber accent, `#0B192C` accent foreground.
 
 ### 3. Daylight Paper (`data-theme="daylight"`, light)
 - **Palette:** `#F1F2F4` base canvas, `#FFFFFF` card surface, `#C9CDD5` border (`#71717A` hover), `#09090B` primary text, `#3F3F46` secondary text, `#52525B` muted metadata (7.4:1 on `#FFFFFF`), `#047857` accent (5.4:1 on `#FFFFFF`), `#FFFFFF` accent foreground.
