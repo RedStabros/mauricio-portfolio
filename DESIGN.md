@@ -22,11 +22,11 @@ All components consume semantic CSS variables defined in `src/styles/global.css`
 - **Palette:** `#F1F2F4` base canvas, `#FFFFFF` card surface, `#C9CDD5` border (`#71717A` hover), `#09090B` primary text, `#3F3F46` secondary text, `#52525B` muted metadata (7.4:1 on `#FFFFFF`), `#047857` accent (5.4:1 on `#FFFFFF`), `#FFFFFF` accent foreground.
 
 ## Theme transition choreography
-Theme switching is the single authored motion moment in the portfolio, with one signature per theme sharing the same 580ms/640ms timing and `cubic-bezier(0.22, 1, 0.36, 1)` curve:
+Theme switching is the single authored motion moment in the portfolio, using a dedicated `view-transition-name: skin-wave` Top Layer above `root` at `500ms` (`ease-in-out` sweep + `ease-in` mesh fade):
 - **Trigger:** User-initiated only, from the three-dot switcher in `src/components/Sidebar.astro`. Never runs automatically.
-- **Precision (`precision`):** Radial `circle()` reveal expanding from the clicked dot paired with the `#hex-skin-grid` hexagonal mesh.
-- **Editorial (`editorial`):** Diagonal `polygon()` sweep from left to right paired with the `#arch-skin-grid` orthogonal blueprint grid.
-- **Daylight (`daylight`):** Top-down `inset()` shutter reveal paired with the `#paper-dot-grid` fine dot grid.
+- **Precision (`precision`):** Radial `circle()` reveal expanding from the clicked dot paired with the emerald `#hex-skin-grid` hexagonal mesh.
+- **Blueprint (`blueprint`):** Diagonal `polygon()` sweep from left to right paired with the amber `#arch-skin-grid` orthogonal blueprint grid.
+- **Daylight (`daylight`):** Top-down `inset()` shutter reveal paired with the graphite `#paper-dot-grid` geometric diamond lattice.
 - **Accessibility:** `prefers-reduced-motion: reduce` bypasses both the clip-path animation and the SVG overlay for an instant swap. Active theme changes announce in `#theme-live-status` (`aria-live="polite"`).
 
 ## Structural grammar

@@ -3,6 +3,18 @@
 All notable changes to this portfolio are documented in this file.
 This project follows Semantic Versioning (`MAJOR.MINOR.PATCH`).
 
+## [1.1.0] - 2026-11-23
+
+### Added
+- Replaced the second dark theme with **Engineering Blueprint** (`#0B192C` navy base, `#112540` surface, `#223F66` borders, `#F59E0B` amber accent) to create a three-mode palette system (Dark, Color Blueprint, Light Paper).
+- Completed the geometric Top-Layer transition triad (`view-transition-name: skin-wave`, `500ms`): emerald hexagon (`precision`), amber blueprint square (`blueprint`), and graphite diamond lattice (`daylight`).
+- Added the `Hecho con amor por RedStabros` / `Made with love by RedStabros` footer signature with inline SVG heart icon.
+
+### Fixed
+- Switched `/api/repos` sorting and activity timestamps from `updatedAt` to `pushedAt` so relative dates reflect actual code commits rather than metadata edits.
+- Highlighted `Demo / App` action buttons with theme accent styling for repositories that declare a production `homepageUrl`.
+- Disabled default `::view-transition-group(*)` animations and removed mid-transition DOM mutations to eliminate end-of-sweep stutter and flashing.
+
 ## [1.0.0] - 2026-11-22
 
 ### Added

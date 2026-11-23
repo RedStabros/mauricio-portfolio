@@ -2,7 +2,7 @@
 
 Personal portfolio for Mauricio Saldarriaga Garcia, Full-Stack and Mobile Engineer. Built as a static Astro site paired with a Cloudflare Pages Function that syncs GitHub repositories tagged with `portfolio` at the edge.
 
-Current release: `v1.0.0` (see [CHANGELOG.md](./CHANGELOG.md)).
+Current release: `v1.1.0` (see [CHANGELOG.md](./CHANGELOG.md)).
 
 ## Why this stack
 
@@ -52,10 +52,10 @@ Instead of adding WebGL or an animation library, the theme switch uses native br
 1. **Semantic CSS tokens (`src/styles/global.css`):** Every component reads CSS variables (`--color-bg-base`, `--color-surface`, `--color-border`, `--color-accent`, `--font-sans`, `--font-mono`). Switching themes only updates `document.documentElement.dataset.theme` and the `<meta name="theme-color">` tag.
 2. **Pre-paint persistence (`public/locale-init.js`):** A small external script runs synchronously in `<head>` before first paint to read `portfolio-theme` and `portfolio-locale` from `localStorage`. Keeping it external avoids `'unsafe-inline'` in the Content Security Policy while preventing a flash of the default theme on reload.
 3. **Origin calculation (`src/components/Sidebar.astro`):** When a user clicks one of the three theme dots, `getBoundingClientRect()` captures the button center `(x, y)` and computes the maximum radius to the farthest corner of the viewport using `Math.hypot`.
-4. **View Transitions API (`document.startViewTransition`):** Default crossfade animations on `::view-transition-old(root)` and `::view-transition-new(root)` are disabled in CSS. Each incoming theme runs its own `clip-path` choreography over 580ms (`cubic-bezier(0.22, 1, 0.36, 1)`):
-   - `precision`: radial `circle()` expansion from the clicked dot + hexagonal SVG mesh (`#hex-skin-grid`).
-   - `editorial`: diagonal `polygon()` sweep from left to right + orthogonal architectural grid (`#arch-skin-grid`).
-   - `daylight`: top-down `inset()` shutter reveal + engineering notebook dot grid (`#paper-dot-grid`).
+4. **View Transitions API (`document.startViewTransition`):** Default browser animations on `::view-transition-group(*)` and `::view-transition-new/old(*)` are disabled in CSS. Each incoming theme runs a dedicated 500ms `clip-path` choreography paired with a Top-Layer SVG pattern (`view-transition-name: skin-wave`):
+   - `precision`: radial `circle()` expansion from the clicked dot + emerald hexagonal mesh (`#hex-skin-grid`).
+   - `blueprint`: diagonal `polygon()` sweep from left to right + amber orthogonal blueprint grid (`#arch-skin-grid`).
+   - `daylight`: top-down `inset()` shutter reveal + graphite diamond lattice (`#paper-dot-grid`).
 5. **Transient SVG overlay (`#cyber-skin-wave` in `src/layouts/BaseLayout.astro`):** A fixed `pointer-events-none` SVG `<pattern>` tinted with the incoming theme accent sweeps alongside the `clip-path` over 640ms, fades to `opacity: 0`, and hides on completion so resting pages stay completely clean.
 6. **Reduced motion and browser fallback:** If `prefers-reduced-motion: reduce` is active or the browser does not support `document.startViewTransition`, `applyTheme()` updates the tokens immediately without running animations.
 
