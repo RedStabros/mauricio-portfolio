@@ -378,7 +378,7 @@ export const UI_COPY = {
       yearsAgo: 'hace {n} años',
     },
     footer: {
-      builtWith: 'Construido con Astro, Tailwind CSS y Cloudflare Pages Functions.',
+      madeWithLovePrefix: 'Hecho con amor por',
     },
   },
   en: {
@@ -438,7 +438,7 @@ export const UI_COPY = {
       yearsAgo: '{n} years ago',
     },
     footer: {
-      builtWith: 'Built with Astro, Tailwind CSS, and Cloudflare Pages Functions.',
+      madeWithLovePrefix: 'Made with love by',
     },
   },
 } as const;

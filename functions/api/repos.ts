@@ -24,6 +24,7 @@ interface GitHubGraphQLRepoNode {
   homepageUrl: string | null;
   isPrivate: boolean;
   isArchived: boolean;
+  pushedAt: string | null;
   updatedAt: string;
   owner: {
     login: string;
@@ -50,16 +51,15 @@ interface GitHubGraphQLResponse {
 const PORTFOLIO_TOPIC = 'portfolio';
 const GITHUB_GRAPHQL_ENDPOINT = 'https://api.github.com/graphql';
 
-// Pull owned public and private repos sorted by last update.
-// Filtering by the "portfolio" topic happens after the query so private repos
-// show up without waiting on GitHub search indexing.
+// Pull owned public and private repos sorted by last code push (pushedAt),
+// so metadata edits like adding topics do not fake recent code activity.
 const REPOS_QUERY = /* GraphQL */ `
   query PortfolioRepositories {
     viewer {
       repositories(
         first: 100
         ownerAffiliations: [OWNER]
-        orderBy: { field: UPDATED_AT, direction: DESC }
+        orderBy: { field: PUSHED_AT, direction: DESC }
       ) {
         nodes {
           name
@@ -68,6 +68,7 @@ const REPOS_QUERY = /* GraphQL */ `
           homepageUrl
           isPrivate
           isArchived
+          pushedAt
           updatedAt
           owner {
             login
@@ -334,7 +335,8 @@ function sanitizeRepository(node: GitHubGraphQLRepoNode): SanitizedRepo {
     homepageUrl: normalizeHomepageUrl(node.homepageUrl),
     repoUrl: isPrivate ? null : normalizeGitHubRepoUrl(node.url),
     isPrivate,
-    updatedAt: node.updatedAt,
+    // Prefer pushedAt so the UI reflects real code commits instead of topic/settings edits.
+    updatedAt: node.pushedAt ?? node.updatedAt,
     languages,
     topics,
   };

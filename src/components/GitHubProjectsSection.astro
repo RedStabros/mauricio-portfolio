@@ -260,7 +260,7 @@ import { UI_COPY } from '../data/profile';
 
     const demoLinkHtml = safeDemoUrl
       ? `<a href="${escapeHtml(safeDemoUrl)}" target="_blank" rel="noopener noreferrer"
-           class="inline-flex min-h-[32px] items-center gap-1.5 rounded border border-border bg-bg-base px-2.5 py-1 font-mono text-xs text-text-primary transition-colors duration-150 hover:border-border-hover hover:text-accent">
+           class="inline-flex min-h-[32px] items-center gap-1.5 rounded border border-accent-border bg-accent-subtle px-2.5 py-1 font-mono text-xs font-medium text-accent transition-colors duration-150 hover:border-accent hover:bg-accent hover:text-accent-fg">
            ${escapeHtml(copy.actions.liveDemo)}
            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
              <path d="M7 17 17 7" />
