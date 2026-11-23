@@ -128,11 +128,11 @@ export const PROFILE = {
 
   featuredProjects: [
     {
-      id: 'ciudad-friki',
-      name: 'Ciudad Friki',
+      id: 'ciudad-friki-app',
+      name: 'Ciudad Friki — App Móvil',
       role: {
-        es: 'Founder & Lead Full-Stack Engineer',
-        en: 'Founder & Lead Full-Stack Engineer',
+        es: 'Founder & Lead Mobile / Full-Stack Engineer',
+        en: 'Founder & Lead Mobile / Full-Stack Engineer',
       },
       period: {
         es: 'Nov 2025 — Presente',
@@ -146,27 +146,23 @@ export const PROFILE = {
         { value: '5.0 / 5', label: { es: 'calificación', en: 'Play Store rating' } },
       ],
       summary: {
-        es: 'Ecosistema digital multiplataforma sin ánimo de lucro para comunidades y eventos masivos, desplegado globalmente en Google Play Store y Web, incluyendo desarrollo de minijuegos y mecánicas gamificadas.',
-        en: 'Non-profit cross-platform digital ecosystem for communities and large-scale events, deployed globally on Google Play Store and Web, including in-app game development and gamified community mechanics.',
+        es: 'Aplicación móvil multiplataforma sin ánimo de lucro para comunidades y eventos masivos, publicada globalmente en Google Play Store con minijuegos y mecánicas gamificadas.',
+        en: 'Non-profit cross-platform mobile application for communities and large-scale events, published globally on Google Play with in-app mini-games and gamified mechanics.',
       },
       highlights: {
         es: [
-          'Arquitectura escalable en Node.js, Express, Prisma ORM y PostgreSQL (Supabase) con transacciones atómicas y seguridad RLS.',
-          'Sincronización móvil (React Native) y web (Vue.js) con autenticación JWT, geolocalización y APIs REST.',
-          'Desarrollo de juegos y motor de recompensas con trivias, encuestas interactivas y validación de asistencia en sitio vía QR.',
+          'Desarrollo de minijuegos y motor de recompensas con trivias, retos interactivos y validación de asistencia en sitio vía escaneo QR.',
+          'Cliente móvil en React Native y TypeScript con autenticación JWT, geolocalización y sincronización directa con el backend.',
+          'Ciclo completo liderado de forma autónoma: diseño en Figma, registro de propiedad intelectual y publicación en Google Play.',
         ],
         en: [
-          'Scalable backend with Node.js, Express, Prisma ORM, and PostgreSQL (Supabase) supporting atomic transactions and RLS.',
-          'Synchronized mobile (React Native) and web (Vue.js) clients with JWT auth, geolocation, and REST APIs.',
-          'In-app game development and dynamic rewards engine powered by interactive trivia, surveys, and QR attendance validation for on-site staff.',
+          'In-app game development and dynamic rewards engine featuring trivia, interactive challenges, and QR attendance validation for on-site staff.',
+          'Mobile client built with React Native and TypeScript supporting JWT auth, geolocation check-ins, and real-time backend sync.',
+          'End-to-end solo delivery from Figma prototyping and intellectual property registration to global Google Play releases.',
         ],
       },
-      stack: ['React Native', 'TypeScript', 'Vue.js', 'Game Dev', 'Node.js', 'Supabase', 'PostgreSQL', 'Prisma'],
+      stack: ['React Native', 'Expo', 'TypeScript', 'Game Dev', 'QR & Geolocation', 'JWT'],
       links: [
-        {
-          label: { es: 'Web en Producción', en: 'Live Web App' },
-          href: 'https://ciudadfriki.app/',
-        },
         {
           label: { es: 'Google Play', en: 'Google Play' },
           href: 'https://play.google.com/store/apps/details?id=com.redstabros.ciudadfriki',
@@ -174,33 +170,41 @@ export const PROFILE = {
       ],
     },
     {
-      id: 'gss-enterprise',
-      name: 'GSS Group — Enterprise Web Suite',
+      id: 'ciudad-friki-web',
+      name: 'Ciudad Friki — Ecosistema Web',
       role: {
-        es: 'Frontend Engineer',
-        en: 'Frontend Engineer',
+        es: 'Founder & Lead Full-Stack Engineer',
+        en: 'Founder & Lead Full-Stack Engineer',
       },
       period: {
-        es: 'Mar 2023 — Presente',
-        en: 'Mar 2023 — Present',
+        es: 'Nov 2025 — Presente',
+        en: 'Nov 2025 — Present',
       },
-      status: 'enterprise',
+      status: 'production',
+      nonProfit: true,
       summary: {
-        es: 'Desarrollo frontend de aplicaciones web empresariales de alta mantenibilidad con arquitectura modular en Vue.js y flujos acelerados por IA.',
-        en: 'Enterprise-grade web applications engineered with modular Vue.js architecture and AI-accelerated frontend delivery pipelines.',
+        es: 'Plataforma web en producción desplegada en Cloudflare Pages con paridad funcional respecto a la app móvil, gestión de reseñas, retos QR y arquitectura segura sobre Supabase.',
+        en: 'Production web platform deployed on Cloudflare Pages with feature parity alongside the mobile app, covering reviews, QR challenges, and secure Supabase data architecture.',
       },
       highlights: {
         es: [
-          'Construcción de interfaces empresariales robustas en Vue.js y Tailwind CSS a partir de especificaciones de producto.',
-          'Adopción pionera de flujos con Claude Code y Google Gemini, reduciendo tiempos de entrega manteniendo estándares de calidad.',
+          'Arquitectura backend en Node.js, Express, Prisma ORM y PostgreSQL (Supabase) con transacciones atómicas y seguridad Row-Level Security (RLS).',
+          'Interfaz web moderna en Vue.js y TypeScript sincronizada en tiempo real con la app móvil para comunidad y operación de eventos.',
+          'Despliegue continuo y optimización en el Edge sobre Cloudflare Pages con dominio propio ciudadfriki.app.',
         ],
         en: [
-          'Built maintainable enterprise interfaces with Vue.js and Tailwind CSS translated directly from product design specs.',
-          'Pioneered AI-assisted workflows using Claude Code and Google Gemini to accelerate delivery without compromising code quality.',
+          'Backend architecture built on Node.js, Express, Prisma ORM, and PostgreSQL (Supabase) with atomic transactions and strict Row-Level Security (RLS).',
+          'Modern Vue.js and TypeScript web client synchronized with the mobile app for community engagement and live event operations.',
+          'Continuous edge deployment on Cloudflare Pages under the custom domain ciudadfriki.app.',
         ],
       },
-      stack: ['Vue.js', 'Tailwind CSS', 'TypeScript', 'Claude Code', 'Google Gemini', 'SCRUM'],
-      links: [],
+      stack: ['Vue.js', 'TypeScript', 'Node.js', 'Supabase (RLS)', 'Prisma', 'PostgreSQL', 'Cloudflare Pages'],
+      links: [
+        {
+          label: { es: 'Web en Producción', en: 'Live Web App' },
+          href: 'https://ciudadfriki.app/',
+        },
+      ],
     },
   ] satisfies FeaturedProject[],
 
