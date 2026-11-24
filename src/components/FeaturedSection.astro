@@ -145,23 +145,83 @@ import { PROFILE, UI_COPY } from '../data/profile';
                     </h4>
                     <ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                       {group.apps.map((app) => (
-                        <li class="flex items-start gap-3 rounded border border-border/70 bg-surface p-3">
-                          <img
-                            src={app.icon}
-                            alt={app.name}
-                            width="36"
-                            height="36"
-                            loading="lazy"
-                            decoding="async"
-                            class="h-9 w-9 shrink-0 rounded border border-border bg-bg-base object-cover"
-                          />
-                          <div class="min-w-0">
-                            <p class="font-mono text-xs font-medium text-text-primary">{app.name}</p>
-                            <p class="mt-1 text-xs leading-relaxed text-text-secondary">
-                              <span data-lang="es">{app.description.es}</span>
-                              <span data-lang="en">{app.description.en}</span>
-                            </p>
-                          </div>
+                        <li>
+                          <a
+                            data-lang="es"
+                            href={`https://apps-4all.pages.dev/es/apps/${app.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group/app flex h-full items-start gap-3 rounded border border-border/70 bg-surface p-3 transition-colors duration-150 hover:border-border-hover"
+                          >
+                            <img
+                              src={app.icon}
+                              alt={app.name}
+                              width="36"
+                              height="36"
+                              loading="lazy"
+                              decoding="async"
+                              class="h-9 w-9 shrink-0 rounded border border-border bg-bg-base object-cover"
+                            />
+                            <div class="min-w-0 flex-1">
+                              <div class="flex items-center justify-between gap-2">
+                                <p class="font-mono text-xs font-medium text-text-primary transition-colors duration-150 group-hover/app:text-accent">
+                                  {app.name}
+                                </p>
+                                <svg
+                                  class="h-3.5 w-3.5 shrink-0 text-text-muted transition-colors duration-150 group-hover/app:text-accent"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="1.75"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M7 17 17 7" />
+                                  <path d="M7 7h10v10" />
+                                </svg>
+                              </div>
+                              <p class="mt-1 text-xs leading-relaxed text-text-secondary">
+                                {app.description.es}
+                              </p>
+                            </div>
+                          </a>
+                          <a
+                            data-lang="en"
+                            href={`https://apps-4all.pages.dev/en/apps/${app.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group/app flex h-full items-start gap-3 rounded border border-border/70 bg-surface p-3 transition-colors duration-150 hover:border-border-hover"
+                          >
+                            <img
+                              src={app.icon}
+                              alt={app.name}
+                              width="36"
+                              height="36"
+                              loading="lazy"
+                              decoding="async"
+                              class="h-9 w-9 shrink-0 rounded border border-border bg-bg-base object-cover"
+                            />
+                            <div class="min-w-0 flex-1">
+                              <div class="flex items-center justify-between gap-2">
+                                <p class="font-mono text-xs font-medium text-text-primary transition-colors duration-150 group-hover/app:text-accent">
+                                  {app.name}
+                                </p>
+                                <svg
+                                  class="h-3.5 w-3.5 shrink-0 text-text-muted transition-colors duration-150 group-hover/app:text-accent"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="1.75"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M7 17 17 7" />
+                                  <path d="M7 7h10v10" />
+                                </svg>
+                              </div>
+                              <p class="mt-1 text-xs leading-relaxed text-text-secondary">
+                                {app.description.en}
+                              </p>
+                            </div>
+                          </a>
                         </li>
                       ))}
                     </ul>

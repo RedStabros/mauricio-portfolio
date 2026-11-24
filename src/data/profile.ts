@@ -31,6 +31,7 @@ export interface FeaturedAppGroup {
   accentDot: string;
   apps: Array<{
     name: string;
+    slug: string;
     icon: string;
     description: LocalizedText;
   }>;
@@ -197,6 +198,7 @@ export const PROFILE = {
             apps: [
               {
                 name: 'Apuntes 4All',
+                slug: 'apuntes-4all',
                 icon: '/icons/4all/apuntes-4all.webp',
                 description: {
                   es: 'Notas rápidas con vista Markdown, fotos locales, checklists y bóveda privada cifrada con biometría.',
@@ -205,6 +207,7 @@ export const PROFILE = {
               },
               {
                 name: 'Seguridad 4All',
+                slug: 'seguridad-4all',
                 icon: '/icons/4all/seguridad-4all.webp',
                 description: {
                   es: 'Generador de contraseñas y passphrases (128 palabras), medidor de entropía, auto-limpieza del portapapeles (30s) y bóveda biométrica.',
@@ -213,6 +216,7 @@ export const PROFILE = {
               },
               {
                 name: 'PDF 4All',
+                slug: 'pdf-4all',
                 icon: '/icons/4all/pdf-4all.webp',
                 description: {
                   es: 'Suite de 8 herramientas PDF offline: leer, fotos a PDF, unir, dividir, organizar páginas, optimizar, rotar 90° y marcas de agua.',
@@ -221,6 +225,7 @@ export const PROFILE = {
               },
               {
                 name: 'Docs 4All',
+                slug: 'docs-4all',
                 icon: '/icons/4all/docs-4all.webp',
                 description: {
                   es: 'Visor ultraligero offline para .docx, .xlsx, .csv, .md y .txt con zoom, buscador y exportación a PDF.',
@@ -229,6 +234,7 @@ export const PROFILE = {
               },
               {
                 name: 'Notas de Voz 4All',
+                slug: 'notas-voz-4all',
                 icon: '/icons/4all/notas-voz-4all.webp',
                 description: {
                   es: 'Grabadora M4A/AAC con pausa/reanudar, grabación con pantalla apagada, etiquetas, velocidad variable y recorte no destructivo.',
@@ -243,6 +249,7 @@ export const PROFILE = {
             apps: [
               {
                 name: 'QR 4All',
+                slug: 'qr-4all',
                 icon: '/icons/4all/qr-4all.webp',
                 description: {
                   es: 'Generador en 10 formatos con gradientes, marcos y logos (Nivel H), escáner Solo QR / QR+Barras y respaldo JSON.',
@@ -251,6 +258,7 @@ export const PROFILE = {
               },
               {
                 name: 'ZIP 4All',
+                slug: 'zip-4all',
                 icon: '/icons/4all/zip-4all.webp',
                 description: {
                   es: 'Compresor y extractor ZIP nativo con cifrado AES-256 e inspección/extracción selectiva.',
@@ -259,6 +267,7 @@ export const PROFILE = {
               },
               {
                 name: 'Fotos Ligeras 4All',
+                slug: 'fotos-ligeras-4all',
                 icon: '/icons/4all/fotos-ligeras-4all.webp',
                 description: {
                   es: 'Compresor por lotes con escudo de privacidad EXIF/GPS, rotación 90° y comparador antes/después.',
@@ -267,6 +276,7 @@ export const PROFILE = {
               },
               {
                 name: 'Lupa y Linterna 4All',
+                slug: 'lupa-4all',
                 icon: '/icons/4all/lupa-4all.webp',
                 description: {
                   es: 'Magnificador 1x-4x con congelación nítida, filtros clínicos de alto contraste y linterna LED.',
@@ -275,6 +285,7 @@ export const PROFILE = {
               },
               {
                 name: 'Reproductor 4All',
+                slug: 'reproductor-4all',
                 icon: '/icons/4all/reproductor-4all.webp',
                 description: {
                   es: 'Reproductor audiófilo offline con motor C++ Google Oboe, EQ de 5 bandas, espectro visual, filtro anti-WhatsApp y Android Auto nativo.',
@@ -289,6 +300,7 @@ export const PROFILE = {
             apps: [
               {
                 name: 'Enfoque 4All',
+                slug: 'enfoque-4all',
                 icon: '/icons/4all/enfoque-4all.webp',
                 description: {
                   es: 'Temporizador Pomodoro antidesfase con etiquetas de tarea, ambientes sonoros offline, matriz de rachas y exportación JSON.',
@@ -297,6 +309,7 @@ export const PROFILE = {
               },
               {
                 name: 'Cuentas 4All',
+                slug: 'cuentas-4all',
                 icon: '/icons/4all/cuentas-4all.webp',
                 description: {
                   es: 'Calculadora de propinas, comensales guardados, platos compartidos y redondeo de efectivo.',
@@ -305,6 +318,7 @@ export const PROFILE = {
               },
               {
                 name: 'Medidas 4All',
+                slug: 'medidas-4all',
                 icon: '/icons/4all/medidas-4all.webp',
                 description: {
                   es: 'Conversor universal en 10 categorías físicas y digitales con favoritos fijados y buscador.',
@@ -313,6 +327,7 @@ export const PROFILE = {
               },
               {
                 name: 'Azar 4All',
+                slug: 'azar-4all',
                 icon: '/icons/4all/azar-4all.webp',
                 description: {
                   es: 'Ruleta 360° con memoria local, dados, moneda y divisor de equipos Fisher-Yates.',
@@ -321,6 +336,7 @@ export const PROFILE = {
               },
               {
                 name: 'Festivos 4All',
+                slug: 'festivos-4all',
                 icon: '/icons/4all/festivos-4all.webp',
                 description: {
                   es: 'Calendario perpetuo multipaís con filtro "Solo Puentes", calculadora de días hábiles y exportación a calendario nativo.',
