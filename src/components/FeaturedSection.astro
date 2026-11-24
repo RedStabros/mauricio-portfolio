@@ -24,7 +24,7 @@ import { PROFILE, UI_COPY } from '../data/profile';
         >
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="space-y-1">
-              <div class="flex flex-wrap items-center gap-2.5">
+              <div class="flex flex-wrap items-center gap-2">
                 <h3 class:list={['font-semibold tracking-tight text-text-primary', index === 0 ? 'text-lg' : 'text-base']}>
                   {project.name}
                 </h3>
@@ -59,6 +59,17 @@ import { PROFILE, UI_COPY } from '../data/profile';
             </span>
           </div>
 
+          {'badges' in project && project.badges && project.badges.length > 0 && (
+            <ul class="mt-3 flex flex-wrap gap-1.5">
+              {project.badges.map((badge) => (
+                <li class="rounded border border-border bg-bg-base px-2 py-0.5 font-mono text-[11px] text-text-secondary">
+                  <span data-lang="es">{badge.es}</span>
+                  <span data-lang="en">{badge.en}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <p class="mt-4 max-w-[68ch] text-sm leading-relaxed text-text-secondary">
             <span data-lang="es">{project.summary.es}</span>
             <span data-lang="en">{project.summary.en}</span>
@@ -87,6 +98,79 @@ import { PROFILE, UI_COPY } from '../data/profile';
             ))}
           </ul>
 
+          {'appCatalog' in project && project.appCatalog && (
+            <details class="group/catalog mt-3 rounded border border-border bg-bg-base">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 font-mono text-xs text-text-primary transition-colors duration-150 hover:text-accent [&::-webkit-details-marker]:hidden">
+                <div class="flex min-w-0 flex-wrap items-center gap-3">
+                  <div class="flex shrink-0 items-center -space-x-1.5" aria-hidden="true">
+                    {project.appCatalog.groups.slice(0, 3).flatMap((g) => g.apps.slice(0, 2)).map((previewApp) => (
+                      <img
+                        src={previewApp.icon}
+                        alt=""
+                        width="22"
+                        height="22"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-[22px] w-[22px] rounded-sm border border-border bg-surface object-cover"
+                      />
+                    ))}
+                  </div>
+                  <span class="min-w-0">
+                    <span data-lang="es">{project.appCatalog.triggerLabel.es}</span>
+                    <span data-lang="en">{project.appCatalog.triggerLabel.en}</span>
+                  </span>
+                </div>
+                <svg
+                  class="h-4 w-4 shrink-0 text-text-muted transition-transform duration-150 group-open/catalog:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </summary>
+              <div class="divide-y divide-border border-t border-border px-4">
+                {project.appCatalog.groups.map((group) => (
+                  <div class="py-4">
+                    <h4 class="mb-2.5 flex items-center gap-2 font-mono text-[11px] font-medium tracking-wider text-text-muted uppercase">
+                      <span
+                        class="h-2 w-2 rounded-full"
+                        style={`background-color: ${group.accentDot}`}
+                        aria-hidden="true"
+                      />
+                      <span data-lang="es">{group.category.es}</span>
+                      <span data-lang="en">{group.category.en}</span>
+                    </h4>
+                    <ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                      {group.apps.map((app) => (
+                        <li class="flex items-start gap-3 rounded border border-border/70 bg-surface p-3">
+                          <img
+                            src={app.icon}
+                            alt={app.name}
+                            width="36"
+                            height="36"
+                            loading="lazy"
+                            decoding="async"
+                            class="h-9 w-9 shrink-0 rounded border border-border bg-bg-base object-cover"
+                          />
+                          <div class="min-w-0">
+                            <p class="font-mono text-xs font-medium text-text-primary">{app.name}</p>
+                            <p class="mt-1 text-xs leading-relaxed text-text-secondary">
+                              <span data-lang="es">{app.description.es}</span>
+                              <span data-lang="en">{app.description.en}</span>
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
+
           <div class="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
             <ul class="flex flex-wrap gap-1.5">
               {project.stack.map((tech) => (
@@ -98,21 +182,58 @@ import { PROFILE, UI_COPY } from '../data/profile';
 
             {project.links.length > 0 && (
               <div class="flex flex-wrap items-center gap-2">
-                {project.links.map((link) => (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex min-h-[34px] items-center gap-1.5 rounded border border-border bg-bg-base px-3 py-1 font-mono text-xs text-text-primary transition-colors duration-150 hover:border-border-hover hover:text-accent"
-                  >
-                    <span data-lang="es">{link.label.es}</span>
-                    <span data-lang="en">{link.label.en}</span>
-                    <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-                      <path d="M7 17 17 7" />
-                      <path d="M7 7h10v10" />
-                    </svg>
-                  </a>
-                ))}
+                {project.links.map((link, linkIdx) => {
+                  const isLocalizedHref = typeof link.href !== 'string';
+                  const isPrimaryLink = index === 0 && linkIdx === 0;
+                  const linkClasses = isPrimaryLink
+                    ? 'inline-flex min-h-[34px] items-center gap-1.5 rounded border border-accent-border bg-accent-subtle px-3 py-1 font-mono text-xs font-medium text-accent transition-colors duration-150 hover:border-accent hover:bg-accent hover:text-accent-fg'
+                    : 'inline-flex min-h-[34px] items-center gap-1.5 rounded border border-border bg-bg-base px-3 py-1 font-mono text-xs text-text-primary transition-colors duration-150 hover:border-border-hover hover:text-accent';
+
+                  return isLocalizedHref ? (
+                    <>
+                      <a
+                        data-lang="es"
+                        href={(link.href as { es: string; en: string }).es}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class={linkClasses}
+                      >
+                        <span>{link.label.es}</span>
+                        <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                          <path d="M7 17 17 7" />
+                          <path d="M7 7h10v10" />
+                        </svg>
+                      </a>
+                      <a
+                        data-lang="en"
+                        href={(link.href as { es: string; en: string }).en}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class={linkClasses}
+                      >
+                        <span>{link.label.en}</span>
+                        <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                          <path d="M7 17 17 7" />
+                          <path d="M7 7h10v10" />
+                        </svg>
+                      </a>
+                    </>
+                  ) : (
+                    <a
+                      href={link.href as string}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={linkClasses}
+                    >
+                      <span data-lang="es">{link.label.es}</span>
+                      <span data-lang="en">{link.label.en}</span>
+                      <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                        <path d="M7 17 17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+                  );
+                })}
               </div>
             )}
           </div>

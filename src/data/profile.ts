@@ -21,6 +21,21 @@ export interface StackCategory {
   items: string[];
 }
 
+export interface FeaturedProjectLink {
+  label: LocalizedText;
+  href: string | LocalizedText;
+}
+
+export interface FeaturedAppGroup {
+  category: LocalizedText;
+  accentDot: string;
+  apps: Array<{
+    name: string;
+    icon: string;
+    description: LocalizedText;
+  }>;
+}
+
 export interface FeaturedProject {
   id: string;
   name: string;
@@ -28,6 +43,7 @@ export interface FeaturedProject {
   period: LocalizedText;
   status: 'production' | 'enterprise';
   nonProfit?: boolean;
+  badges?: LocalizedText[];
   metrics?: Array<{
     value: string;
     label: LocalizedText;
@@ -37,11 +53,12 @@ export interface FeaturedProject {
     es: string[];
     en: string[];
   };
+  appCatalog?: {
+    triggerLabel: LocalizedText;
+    groups: FeaturedAppGroup[];
+  };
   stack: string[];
-  links: Array<{
-    label: LocalizedText;
-    href: string;
-  }>;
+  links: FeaturedProjectLink[];
 }
 
 export interface ExperienceItem {
@@ -107,26 +124,243 @@ export const PROFILE = {
     {
       id: 'mobile',
       label: { es: 'Mobile', en: 'Mobile' },
-      items: ['React Native', 'Expo', 'TypeScript', 'Google Play Deploy', 'QR & Geolocation'],
+      items: ['React Native', 'Expo', 'NativeWind', 'TypeScript', 'C++ (Google Oboe)', 'Android Auto', 'Google Play'],
     },
     {
       id: 'frontend',
       label: { es: 'Frontend', en: 'Frontend' },
-      items: ['Vue.js', 'React.js', 'Astro', 'Tailwind CSS', 'HTML / CSS', 'Figma'],
+      items: ['Vue.js', 'React.js', 'Astro', 'Tailwind CSS', 'react-i18next', 'Figma'],
     },
     {
       id: 'backend',
       label: { es: 'Backend & DB', en: 'Backend & DB' },
-      items: ['Node.js', 'Express', 'PostgreSQL', 'Supabase (RLS)', 'Prisma ORM', 'REST APIs', 'JWT Auth'],
+      items: ['Node.js', 'Express', 'PostgreSQL', 'Supabase (RLS)', 'Prisma ORM', 'REST / GraphQL', 'JWT Auth'],
     },
     {
       id: 'tools-ai',
       label: { es: 'Herramientas / IA', en: 'Tools / AI' },
-      items: ['Claude Code', 'Google Gemini', 'Cloudflare Pages', 'Git', 'DevOps', 'SCRUM'],
+      items: ['Turborepo', 'pnpm', 'Cloudflare Pages', 'Gradle / RSA-4096', 'Claude Code', 'Google Gemini', 'Git'],
     },
   ] satisfies StackCategory[],
 
   featuredProjects: [
+    {
+      id: 'apps-4all',
+      name: 'Para Todos (4All)',
+      role: {
+        es: 'Creador & Arquitecto Mobile / Sistemas (15 Apps Android)',
+        en: 'Creator & Lead Mobile / Systems Architect (15 Android Apps)',
+      },
+      period: {
+        es: 'v1.0.0 en Producción',
+        en: 'v1.0.0 in Production',
+      },
+      status: 'production',
+      nonProfit: true,
+      badges: [
+        { es: '100% Offline', en: '100% Offline' },
+        { es: '0 Trackers / 0 Ads', en: '0 Trackers / 0 Ads' },
+        { es: 'C++ Oboe & Android Auto', en: 'C++ Oboe & Android Auto' },
+        { es: 'Gratis · PolyForm No Comercial', en: 'Free · PolyForm Noncommercial' },
+      ],
+      metrics: [
+        { value: '15', label: { es: 'apps Android firmadas', en: 'signed Android apps' } },
+        { value: '26', label: { es: 'idiomas', en: 'languages' } },
+        { value: '495', label: { es: 'páginas estáticas', en: 'static pages' } },
+        { value: '$0/mes', label: { es: 'costo operativo', en: 'operating cost' } },
+      ],
+      summary: {
+        es: 'Ecosistema de 15 aplicaciones Android de utilidad diaria construidas con arquitectura 100% Offline (Local-First) y Privacy-First: sin cuentas, sin servidores remotos, sin anuncios y sin telemetría. Vive en un monorepo con Turborepo y pnpm, soporta 26 idiomas y se distribuye con un portal de 495 páginas en Astro sobre Cloudflare Pages + GitHub Releases.',
+        en: 'An ecosystem of 15 everyday Android utility apps built with a strict 100% Offline (Local-First) and Privacy-First architecture: zero accounts, zero remote servers, zero ads, and zero telemetry. Engineered as a Turborepo + pnpm monorepo localized across 26 languages, paired with a 495-page Astro portal on Cloudflare Pages and signed ARM APK releases via GitHub Releases at $0/month operating cost.',
+      },
+      highlights: {
+        es: [
+          'Ingeniería nativa en C++ y Kotlin: motor audiófilo en C++ (Google Oboe + AAudio/OpenSL ES) con ecualizador paramétrico de 5 bandas (filtros Biquad IIR en tiempo real) y soporte nativo para Android Auto (MediaBrowserServiceCompat) en Reproductor 4All.',
+          'Privacidad y criptografía local: cifrado 256-bit respaldado por hardware (Android KeyStore y biometría), compresión ZIP con AES-256, edición vectorial local de PDFs (pdf-lib) y limpieza automática de metadatos EXIF/GPS en imágenes.',
+          'Monorepo Turborepo + pnpm (@apps4all/ui-components, @apps4all/i18n) y pipeline automatizado en PowerShell + Gradle para compilar los 15 APKs ARM ligeros (~51-64 MB) con keystores RSA-4096 independientes y hashes SHA-256 en versions.json (licencia PolyForm Noncommercial 1.0.0).',
+        ],
+        en: [
+          'Native C++ and Kotlin engineering: audiophile C++ audio engine (Google Oboe + AAudio/OpenSL ES) with a 5-band real-time Biquad IIR parametric EQ and native Android Auto support (MediaBrowserServiceCompat) in Reproductor 4All.',
+          'Local-first security and privacy: 256-bit hardware-backed encryption (Android KeyStore and biometrics), native AES-256 ZIP archiving, local vector PDF tooling (pdf-lib), and automatic EXIF/GPS metadata scrubbing.',
+          'Turborepo + pnpm monorepo (@apps4all/ui-components, @apps4all/i18n) with an automated PowerShell + Gradle release pipeline building 15 ARM-only signed APKs (~51-64 MB) using isolated RSA-4096 keystores and SHA-256 manifests in versions.json (PolyForm Noncommercial 1.0.0).',
+        ],
+      },
+      appCatalog: {
+        triggerLabel: {
+          es: 'Explorar las 15 aplicaciones del ecosistema (Productividad · Utilidades · Tiempo y Matemáticas)',
+          en: 'Browse all 15 apps in the ecosystem (Productivity · Utilities · Time & Math)',
+        },
+        groups: [
+          {
+            category: { es: 'Productividad', en: 'Productivity' },
+            accentDot: '#3B82F6',
+            apps: [
+              {
+                name: 'Apuntes 4All',
+                icon: '/icons/4all/apuntes-4all.webp',
+                description: {
+                  es: 'Notas rápidas con vista Markdown, fotos locales, checklists y bóveda privada cifrada con biometría.',
+                  en: 'Quick notes with Markdown preview, local photos, checklists, and a biometric-encrypted private vault.',
+                },
+              },
+              {
+                name: 'Seguridad 4All',
+                icon: '/icons/4all/seguridad-4all.webp',
+                description: {
+                  es: 'Generador de contraseñas y passphrases (128 palabras), medidor de entropía, auto-limpieza del portapapeles (30s) y bóveda biométrica.',
+                  en: 'Password and 128-word passphrase generator, entropy meter, 30s clipboard auto-clear, and biometric encrypted vault.',
+                },
+              },
+              {
+                name: 'PDF 4All',
+                icon: '/icons/4all/pdf-4all.webp',
+                description: {
+                  es: 'Suite de 8 herramientas PDF offline: leer, fotos a PDF, unir, dividir, organizar páginas, optimizar, rotar 90° y marcas de agua.',
+                  en: '8-tool offline PDF suite: reader, images to PDF, merge, split, reorder pages, optimize, rotate 90°, and watermarks.',
+                },
+              },
+              {
+                name: 'Docs 4All',
+                icon: '/icons/4all/docs-4all.webp',
+                description: {
+                  es: 'Visor ultraligero offline para .docx, .xlsx, .csv, .md y .txt con zoom, buscador y exportación a PDF.',
+                  en: 'Lightweight offline viewer for .docx, .xlsx, .csv, .md, and .txt with zoom, search, and PDF export.',
+                },
+              },
+              {
+                name: 'Notas de Voz 4All',
+                icon: '/icons/4all/notas-voz-4all.webp',
+                description: {
+                  es: 'Grabadora M4A/AAC con pausa/reanudar, grabación con pantalla apagada, etiquetas, velocidad variable y recorte no destructivo.',
+                  en: 'M4A/AAC recorder with pause/resume, screen-off recording, tags, variable speed playback, and non-destructive trimming.',
+                },
+              },
+            ],
+          },
+          {
+            category: { es: 'Utilidades', en: 'Utilities' },
+            accentDot: '#14B8A6',
+            apps: [
+              {
+                name: 'QR 4All',
+                icon: '/icons/4all/qr-4all.webp',
+                description: {
+                  es: 'Generador en 10 formatos con gradientes, marcos y logos (Nivel H), escáner Solo QR / QR+Barras y respaldo JSON.',
+                  en: '10-format QR generator with gradients, frames, and custom logos (Level H), QR/barcode scanner, and JSON backups.',
+                },
+              },
+              {
+                name: 'ZIP 4All',
+                icon: '/icons/4all/zip-4all.webp',
+                description: {
+                  es: 'Compresor y extractor ZIP nativo con cifrado AES-256 e inspección/extracción selectiva.',
+                  en: 'Native ZIP compressor and extractor with AES-256 encryption and selective archive inspection.',
+                },
+              },
+              {
+                name: 'Fotos Ligeras 4All',
+                icon: '/icons/4all/fotos-ligeras-4all.webp',
+                description: {
+                  es: 'Compresor por lotes con escudo de privacidad EXIF/GPS, rotación 90° y comparador antes/después.',
+                  en: 'Batch image compressor with EXIF/GPS privacy scrubbing, 90° rotation, and before/after visual comparison.',
+                },
+              },
+              {
+                name: 'Lupa y Linterna 4All',
+                icon: '/icons/4all/lupa-4all.webp',
+                description: {
+                  es: 'Magnificador 1x-4x con congelación nítida, filtros clínicos de alto contraste y linterna LED.',
+                  en: '1x-4x magnifier with crisp frame freeze, high-contrast clinical filters, and LED flashlight.',
+                },
+              },
+              {
+                name: 'Reproductor 4All',
+                icon: '/icons/4all/reproductor-4all.webp',
+                description: {
+                  es: 'Reproductor audiófilo offline con motor C++ Google Oboe, EQ de 5 bandas, espectro visual, filtro anti-WhatsApp y Android Auto nativo.',
+                  en: 'Offline audiophile player powered by C++ Google Oboe, 5-band EQ, live spectrum, WhatsApp-audio filter, and native Android Auto.',
+                },
+              },
+            ],
+          },
+          {
+            category: { es: 'Tiempo y Matemáticas', en: 'Time & Math' },
+            accentDot: '#F59E0B',
+            apps: [
+              {
+                name: 'Enfoque 4All',
+                icon: '/icons/4all/enfoque-4all.webp',
+                description: {
+                  es: 'Temporizador Pomodoro antidesfase con etiquetas de tarea, ambientes sonoros offline, matriz de rachas y exportación JSON.',
+                  en: 'Drift-free Pomodoro timer with task tags, offline ambient soundscapes, streak matrix, and JSON export.',
+                },
+              },
+              {
+                name: 'Cuentas 4All',
+                icon: '/icons/4all/cuentas-4all.webp',
+                description: {
+                  es: 'Calculadora de propinas, comensales guardados, platos compartidos y redondeo de efectivo.',
+                  en: 'Tip and bill splitter supporting saved diners, shared dishes, and cash rounding.',
+                },
+              },
+              {
+                name: 'Medidas 4All',
+                icon: '/icons/4all/medidas-4all.webp',
+                description: {
+                  es: 'Conversor universal en 10 categorías físicas y digitales con favoritos fijados y buscador.',
+                  en: 'Universal unit converter across 10 physical and digital categories with pinned favorites and instant search.',
+                },
+              },
+              {
+                name: 'Azar 4All',
+                icon: '/icons/4all/azar-4all.webp',
+                description: {
+                  es: 'Ruleta 360° con memoria local, dados, moneda y divisor de equipos Fisher-Yates.',
+                  en: '360° decision wheel with local memory, dice, coin flip, and Fisher-Yates team splitter.',
+                },
+              },
+              {
+                name: 'Festivos 4All',
+                icon: '/icons/4all/festivos-4all.webp',
+                description: {
+                  es: 'Calendario perpetuo multipaís con filtro "Solo Puentes", calculadora de días hábiles y exportación a calendario nativo.',
+                  en: 'Multi-country perpetual holiday calendar with long-weekend filter, business-day calculator, and native calendar export.',
+                },
+              },
+            ],
+          },
+        ],
+      },
+      stack: [
+        'React Native',
+        'Expo',
+        'TypeScript',
+        'NativeWind v4',
+        'C++ (Google Oboe)',
+        'Android Auto',
+        'Turborepo',
+        'Astro',
+        'Cloudflare Pages',
+      ],
+      links: [
+        {
+          label: { es: 'Ver Portal Web', en: 'Live Web Portal' },
+          href: { es: 'https://apps-4all.pages.dev/es/', en: 'https://apps-4all.pages.dev/en/' },
+        },
+        {
+          label: { es: 'Descargar APKs (v1.0.0)', en: 'Download APKs (v1.0.0)' },
+          href: 'https://github.com/RedStabros/apps-4all/releases/tag/v1.0.0',
+        },
+        {
+          label: { es: 'Código en GitHub', en: 'GitHub Monorepo' },
+          href: 'https://github.com/RedStabros/apps-4all',
+        },
+        {
+          label: { es: 'SHA-256 Manifest', en: 'SHA-256 Manifest' },
+          href: 'https://apps-4all.pages.dev/versions.json',
+        },
+      ],
+    },
     {
       id: 'ciudad-friki-app',
       name: 'Ciudad Friki — App Móvil',
@@ -347,11 +581,13 @@ export const UI_COPY = {
     },
     filters: {
       all: 'Todos',
-      public: 'Open Source',
+      public: 'Público',
       private: 'Privado',
     },
     badges: {
       openSource: 'Open Source',
+      sourceAvailable: 'Código Público · No comercial',
+      publicRepo: 'Código Público',
       privateProd: 'Privado · Producción',
       production: 'En Producción',
       nonProfit: 'Sin ánimo de lucro',
@@ -407,11 +643,13 @@ export const UI_COPY = {
     },
     filters: {
       all: 'All',
-      public: 'Open Source',
+      public: 'Public',
       private: 'Private',
     },
     badges: {
       openSource: 'Open Source',
+      sourceAvailable: 'Source-Available · Non-Commercial',
+      publicRepo: 'Public Repo',
       privateProd: 'Private · Production',
       production: 'Production',
       nonProfit: 'Non-profit',

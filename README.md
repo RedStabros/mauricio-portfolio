@@ -2,7 +2,7 @@
 
 Personal portfolio for Mauricio Saldarriaga Garcia, Full-Stack and Mobile Engineer. Built as a static Astro site paired with a Cloudflare Pages Function that syncs GitHub repositories tagged with `portfolio` at the edge.
 
-Current release: `v1.1.0` (see [CHANGELOG.md](./CHANGELOG.md)).
+Current release: `v1.2.0` (see [CHANGELOG.md](./CHANGELOG.md)).
 
 ## Why this stack
 

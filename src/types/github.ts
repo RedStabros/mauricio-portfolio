@@ -3,6 +3,12 @@ export interface RepoLanguage {
   color: string;
 }
 
+export interface RepoLicense {
+  spdxId: string | null;
+  name: string | null;
+  isOpenSource: boolean;
+}
+
 // Repository shape returned by /api/repos after server-side filtering.
 // Private repositories always have repoUrl set to null so internal GitHub URLs stay private.
 export interface SanitizedRepo {
@@ -11,6 +17,7 @@ export interface SanitizedRepo {
   homepageUrl: string | null;
   repoUrl: string | null;
   isPrivate: boolean;
+  license: RepoLicense | null;
   updatedAt: string;
   languages: RepoLanguage[];
   topics: string[];

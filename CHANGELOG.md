@@ -3,6 +3,13 @@
 All notable changes to this portfolio are documented in this file.
 This project follows Semantic Versioning (`MAJOR.MINOR.PATCH`).
 
+## [1.2.0] - 2026-11-23
+
+### Added
+- Featured **Para Todos (4All)** as the flagship project in `src/data/profile.ts` and `src/components/FeaturedSection.astro`: 15 offline-first Android apps, 26 languages, 495-page Astro portal, C++ Google Oboe + Android Auto engineering highlights, $0/month distribution metrics, localized portal links (`/es/` and `/en/`), GitHub Releases APK link, monorepo link, and SHA-256 manifest link.
+- Added an accessible, zero-JS `<details>` expandable catalog inside the Para Todos (4All) featured block grouping all 15 apps under Productivity, Utilities, and Time & Math.
+- Expanded `StackSection` and Schema.org JSON-LD (`knowsAbout` / `sameAs`) with `NativeWind`, `C++ (Google Oboe)`, `Android Auto`, `Turborepo`, and `https://apps-4all.pages.dev/`.
+
 ## [1.1.0] - 2026-11-23
 
 ### Added

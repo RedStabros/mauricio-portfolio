@@ -1,4 +1,4 @@
-import type { RepoLanguage, ReposApiErrorResponse, ReposApiResponse, SanitizedRepo } from '../../src/types/github';
+import type { RepoLanguage, RepoLicense, ReposApiErrorResponse, ReposApiResponse, SanitizedRepo } from '../../src/types/github';
 
 interface Env {
   GITHUB_TOKEN?: string;
@@ -26,6 +26,10 @@ interface GitHubGraphQLRepoNode {
   isArchived: boolean;
   pushedAt: string | null;
   updatedAt: string;
+  licenseInfo: {
+    spdxId: string | null;
+    name: string | null;
+  } | null;
   owner: {
     login: string;
   };
@@ -70,6 +74,10 @@ const REPOS_QUERY = /* GraphQL */ `
           isArchived
           pushedAt
           updatedAt
+          licenseInfo {
+            spdxId
+            name
+          }
           owner {
             login
           }
@@ -114,6 +122,33 @@ const NO_STORE_HEADERS: HeadersInit = {
 const HEX_COLOR_RE = /^#[0-9A-Fa-f]{6}$/;
 const UPSTREAM_TIMEOUT_MS = 8000;
 
+// Only OSI-approved open source SPDX identifiers receive the "Open Source" badge.
+// Source-available or non-commercial licenses (such as PolyForm Noncommercial) are labeled separately.
+const OSI_OPEN_SOURCE_SPDX = new Set([
+  'MIT',
+  'Apache-2.0',
+  'BSD-2-Clause',
+  'BSD-3-Clause',
+  'ISC',
+  'MPL-2.0',
+  'GPL-2.0',
+  'GPL-3.0',
+  'LGPL-2.1',
+  'LGPL-3.0',
+  'AGPL-3.0',
+  'Unlicense',
+  '0BSD',
+]);
+
+function normalizeLicense(info: GitHubGraphQLRepoNode['licenseInfo']): RepoLicense | null {
+  if (!info) return null;
+  const spdxId = info.spdxId?.trim() || null;
+  const name = info.name?.trim() || null;
+  if (!spdxId && !name) return null;
+  const isOpenSource = Boolean(spdxId && OSI_OPEN_SOURCE_SPDX.has(spdxId));
+  return { spdxId, name, isOpenSource };
+}
+
 // Sample repositories used only during local development when no token is configured
 // or GitHub is unreachable. Never returned on live Cloudflare traffic.
 function getLocalDevMockRepos(): SanitizedRepo[] {
@@ -128,6 +163,7 @@ function getLocalDevMockRepos(): SanitizedRepo[] {
       homepageUrl: 'https://play.google.com/store/apps/details?id=com.redstabros.ciudadfriki',
       repoUrl: null,
       isPrivate: true,
+      license: null,
       updatedAt: daysAgo(0),
       languages: [
         { name: 'TypeScript', color: '#3178C6' },
@@ -137,27 +173,14 @@ function getLocalDevMockRepos(): SanitizedRepo[] {
       topics: ['react-native', 'expo', 'google-play', 'production'],
     },
     {
-      name: 'ciudad-friki-api',
-      description:
-        'High-concurrency Node.js + Express backend powered by Prisma ORM and Supabase PostgreSQL with atomic reward transactions and strict RLS policies.',
-      homepageUrl: 'https://ciudadfriki.app',
-      repoUrl: null,
-      isPrivate: true,
-      updatedAt: daysAgo(1),
-      languages: [
-        { name: 'TypeScript', color: '#3178C6' },
-        { name: 'SQL', color: '#E38C00' },
-      ],
-      topics: ['nodejs', 'prisma', 'supabase', 'rls'],
-    },
-    {
       name: 'mauricio-portfolio',
       description:
         'Precision-engineered developer portfolio built with Astro, Tailwind CSS v4, and Cloudflare Pages Functions with edge-cached GitHub GraphQL sync.',
-      homepageUrl: 'https://mauriciosaldarriaga.dev',
+      homepageUrl: 'https://mauricio-portfolio-z11.pages.dev',
       repoUrl: 'https://github.com/RedStabros/mauricio-portfolio',
       isPrivate: false,
-      updatedAt: daysAgo(2),
+      license: { spdxId: 'MIT', name: 'MIT License', isOpenSource: true },
+      updatedAt: daysAgo(1),
       languages: [
         { name: 'Astro', color: '#FF5D01' },
         { name: 'TypeScript', color: '#3178C6' },
@@ -166,103 +189,20 @@ function getLocalDevMockRepos(): SanitizedRepo[] {
       topics: ['astro', 'cloudflare-pages', 'tailwindcss', 'edge'],
     },
     {
-      name: 'gss-enterprise-ui-kit',
+      name: 'apps-4all',
       description:
-        'Modular Vue 3 + Tailwind CSS component system for enterprise back-office applications with strict accessibility, keyboard workflows, and token governance.',
-      homepageUrl: null,
-      repoUrl: null,
-      isPrivate: true,
-      updatedAt: daysAgo(6),
-      languages: [
-        { name: 'Vue', color: '#41B883' },
-        { name: 'TypeScript', color: '#3178C6' },
-        { name: 'CSS', color: '#563D7C' },
-      ],
-      topics: ['vue3', 'design-system', 'tailwindcss', 'enterprise'],
-    },
-    {
-      name: 'ai-frontend-workflow-kit',
-      description:
-        'Prompt engineering templates, review rules, and code-generation guardrails for Claude Code and Google Gemini in production Vue and React Native repos.',
-      homepageUrl: null,
-      repoUrl: 'https://github.com/RedStabros/ai-frontend-workflow-kit',
+        'A project for free apps — no ads, no telemetry, completely offline, 100% privacy.',
+      homepageUrl: 'https://apps-4all.pages.dev/es/',
+      repoUrl: 'https://github.com/RedStabros/apps-4all',
       isPrivate: false,
-      updatedAt: daysAgo(12),
+      license: { spdxId: 'NOASSERTION', name: 'PolyForm Noncommercial 1.0.0', isOpenSource: false },
+      updatedAt: daysAgo(0),
       languages: [
         { name: 'TypeScript', color: '#3178C6' },
-        { name: 'Shell', color: '#89E051' },
+        { name: 'Astro', color: '#FF5D01' },
+        { name: 'C++', color: '#F34B7D' },
       ],
-      topics: ['claude-code', 'gemini', 'dx', 'automation'],
-    },
-    {
-      name: 'qr-staff-validator',
-      description:
-        'Offline-resilient QR verification micro-app for on-site event staff with HMAC-signed ticket payloads and instant duplicate-scan protection.',
-      homepageUrl: 'https://ciudadfriki.app',
-      repoUrl: null,
-      isPrivate: true,
-      updatedAt: daysAgo(24),
-      languages: [
-        { name: 'TypeScript', color: '#3178C6' },
-        { name: 'Vue', color: '#41B883' },
-      ],
-      topics: ['qr-code', 'pwa', 'offline-first', 'events'],
-    },
-    {
-      name: 'supabase-rls-patterns',
-      description:
-        'Battle-tested PostgreSQL Row-Level Security policy templates, audit triggers, and pgTAP test suites for multi-tenant SaaS and community apps.',
-      homepageUrl: null,
-      repoUrl: 'https://github.com/RedStabros/supabase-rls-patterns',
-      isPrivate: false,
-      updatedAt: daysAgo(45),
-      languages: [
-        { name: 'SQL', color: '#E38C00' },
-        { name: 'TypeScript', color: '#3178C6' },
-      ],
-      topics: ['postgresql', 'supabase', 'security', 'rls'],
-    },
-    {
-      name: 'onchain-event-badges',
-      description:
-        'Experimental ERC-1155 soulbound attendance badges and gasless claim relay for digital community milestones and live convention check-ins.',
-      homepageUrl: 'https://badges.redstabros.dev',
-      repoUrl: 'https://github.com/RedStabros/onchain-event-badges',
-      isPrivate: false,
-      updatedAt: daysAgo(78),
-      languages: [
-        { name: 'Solidity', color: '#AA6746' },
-        { name: 'TypeScript', color: '#3178C6' },
-      ],
-      topics: ['blockchain', 'erc1155', 'web3', 'badges'],
-    },
-    {
-      name: 'rn-geo-fencing-engine',
-      description:
-        'Lightweight React Native geolocation helper with battery-aware background polling, Haversine zone triggers, and typed permission state machines.',
-      homepageUrl: null,
-      repoUrl: 'https://github.com/RedStabros/rn-geo-fencing-engine',
-      isPrivate: false,
-      updatedAt: daysAgo(135),
-      languages: [
-        { name: 'TypeScript', color: '#3178C6' },
-        { name: 'JavaScript', color: '#F1E05A' },
-      ],
-      topics: ['react-native', 'geolocation', 'mobile'],
-    },
-    {
-      name: 'wireguard-branch-ops',
-      description:
-        'Automated WireGuard VPN provisioning scripts and health-check monitors built for multi-site clinic networks and encrypted remote administration.',
-      homepageUrl: null,
-      repoUrl: null,
-      isPrivate: true,
-      updatedAt: daysAgo(290),
-      languages: [
-        { name: 'Shell', color: '#89E051' },
-        { name: 'Python', color: '#3572A5' },
-      ],
-      topics: ['networking', 'vpn', 'security', 'devops'],
+      topics: ['apk', 'react-native'],
     },
   ].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 }
@@ -335,6 +275,7 @@ function sanitizeRepository(node: GitHubGraphQLRepoNode): SanitizedRepo {
     homepageUrl: normalizeHomepageUrl(node.homepageUrl),
     repoUrl: isPrivate ? null : normalizeGitHubRepoUrl(node.url),
     isPrivate,
+    license: isPrivate ? null : normalizeLicense(node.licenseInfo),
     // Prefer pushedAt so the UI reflects real code commits instead of topic/settings edits.
     updatedAt: node.pushedAt ?? node.updatedAt,
     languages,
