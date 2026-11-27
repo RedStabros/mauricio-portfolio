@@ -153,8 +153,8 @@ export const PROFILE = {
         en: 'Creator & Lead Mobile / Systems Architect (15 Android Apps)',
       },
       period: {
-        es: 'v1.0.0 en Producción',
-        en: 'v1.0.0 in Production',
+        es: 'v1.0.1 en Producción',
+        en: 'v1.0.1 in Production',
       },
       status: 'production',
       nonProfit: true,
@@ -364,8 +364,8 @@ export const PROFILE = {
           href: { es: 'https://apps-4all.pages.dev/es/', en: 'https://apps-4all.pages.dev/en/' },
         },
         {
-          label: { es: 'Descargar APKs (v1.0.0)', en: 'Download APKs (v1.0.0)' },
-          href: 'https://github.com/RedStabros/apps-4all/releases/tag/v1.0.0',
+          label: { es: 'Descargar APKs', en: 'Download APKs' },
+          href: 'https://github.com/RedStabros/apps-4all/releases',
         },
         {
           label: { es: 'Código en GitHub', en: 'GitHub Monorepo' },
